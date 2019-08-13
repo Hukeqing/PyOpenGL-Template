@@ -36,7 +36,23 @@ class Camera:
     def rotate(self, vector3):
         self.rotation += vector3 * self.rotate_speed
 
+    def zoom_in(self, size):
+        self.zoom -= size
+        if self.zoom > 45:
+            self.zoom = 45
+        if self.zoom < 1:
+            self.zoom = 1
+        self.get_perspective()
+
     def rotation_lock(self):
+        if self.rotation.x > 89:
+            self.rotation.x = 89
+        if self.rotation.x < -89:
+            self.rotation.x = -89
+        if self.rotation.y > 45:
+            self.rotation.y = 45
+        if self.rotation.y < -45:
+            self.rotation.y = -45
         pass
 
     def get_forward(self):

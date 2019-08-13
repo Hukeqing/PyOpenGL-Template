@@ -1,6 +1,6 @@
 import time
-
 import glfw
+import glm
 
 
 class GLWindow:
@@ -8,13 +8,7 @@ class GLWindow:
     使用 glfw 创建窗体
     """
 
-    def __init__(self, width, height, window_name='MainWindow', fps_clock=0):
-        """
-        创建窗体，创建后自动生成并将此窗口作为当前窗口
-        :param width:           窗体宽度
-        :param height:          窗体高度
-        :param window_name:     窗体名字
-        """
+    def __init__(self, width, height, window_name='MainWindow', fps_clock=0, sensitivity=0.005):
         self.width = width
         self.height = height
         self.name = window_name
@@ -27,14 +21,15 @@ class GLWindow:
         self.render = None
         self.camera = None
 
+        self.lastX = None
+        self.lastY = None
+        self.sensitivity = sensitivity
+
         self.create_window()
+        self.bind_io_process()
         self.last_time = glfw.get_time()
 
     def create_window(self):
-        """
-        创建窗体，由程序自动调用，不需要手动调用
-        :return:                None
-        """
         if not glfw.init():
             raise RuntimeError('Init glfw error')
         self.window = glfw.create_window(self.width, self.height, self.name, None, None)
@@ -43,15 +38,14 @@ class GLWindow:
             raise RuntimeError('Init glfw error')
         glfw.make_context_current(self.window)
 
+    def bind_io_process(self):
+        glfw.set_cursor_pos_callback(self.window, self.mouse_callback)
+        glfw.set_scroll_callback(self.window, self.scroll_callback)
+
     def set_window_camera(self, camera):
         self.camera = camera
 
     def set_render_function(self, render):
-        """
-        设置 render 函数，此函数将在窗体 mainloop 的时候去调用
-        :param render:          渲染函数
-        :return:                None
-        """
         self.render = render
 
     def input_getkey(self, deltatime):
@@ -62,9 +56,9 @@ class GLWindow:
         if glfw.get_key(self.window, glfw.KEY_S) == glfw.PRESS:
             self.camera.translate(self.camera.forward * -deltatime)
         if glfw.get_key(self.window, glfw.KEY_A) == glfw.PRESS:
-            self.camera.rotate(self.camera.up * -deltatime)
+            self.camera.translate(self.camera.right * -deltatime)
         if glfw.get_key(self.window, glfw.KEY_D) == glfw.PRESS:
-            self.camera.rotate(self.camera.up * deltatime)
+            self.camera.translate(self.camera.right * deltatime)
 
     def draw(self):
         delta_time = glfw.get_time() - self.last_time
@@ -78,10 +72,26 @@ class GLWindow:
 
         self.fps_count_number += 1
         self.fps_count_time += delta_time
-        if self.fps_count_time >= 1:
-            print('fps:', self.fps_count_number)
+        if self.fps_count_time >= 5:
+            print('fps:', self.fps_count_number / 5)
             self.fps_count_time = 0
             self.fps_count_number = 0
+
+    def mouse_callback(self, window, xpos, ypos):
+        if self.lastX is None or self.lastY is None:
+            self.lastX = xpos
+            self.lastY = ypos
+        else:
+            xoffset = xpos - self.lastX
+            yoffset = self.lastY - ypos
+            self.lastX = xpos
+            self.lastY = ypos
+            xoffset *= self.sensitivity
+            yoffset *= self.sensitivity
+            self.camera.rotate(glm.vec3(yoffset, xoffset, 0))
+
+    def scroll_callback(self, window, xoffset, yoffset):
+        self.camera.zoom_in(yoffset)
 
     def window_main_loop(self):
         """
