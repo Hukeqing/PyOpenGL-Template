@@ -1,13 +1,9 @@
 import time
 import glfw
 import glm
-
+from OpenGLEngine.Component.camera import Camera
 
 class GLWindow:
-    """
-    使用 glfw 创建窗体
-    """
-
     def __init__(self, width, height, window_name='MainWindow', fps_clock=0, sensitivity=0.005):
         self.width = width
         self.height = height
@@ -52,13 +48,13 @@ class GLWindow:
         if glfw.get_key(self.window, glfw.KEY_ESCAPE) == glfw.PRESS:
             glfw.set_window_should_close(self.window, True)
         if glfw.get_key(self.window, glfw.KEY_W) == glfw.PRESS:
-            self.camera.translate(self.camera.forward * deltatime)
+            self.camera.transfrom.translate(self.camera.transfrom.forward * deltatime)
         if glfw.get_key(self.window, glfw.KEY_S) == glfw.PRESS:
-            self.camera.translate(self.camera.forward * -deltatime)
+            self.camera.transfrom.translate(self.camera.transfrom.forward * -deltatime)
         if glfw.get_key(self.window, glfw.KEY_A) == glfw.PRESS:
-            self.camera.translate(self.camera.right * -deltatime)
+            self.camera.transfrom.translate(self.camera.transfrom.right * -deltatime)
         if glfw.get_key(self.window, glfw.KEY_D) == glfw.PRESS:
-            self.camera.translate(self.camera.right * deltatime)
+            self.camera.transfrom.translate(self.camera.transfrom.right * deltatime)
 
     def draw(self):
         delta_time = glfw.get_time() - self.last_time
@@ -88,16 +84,12 @@ class GLWindow:
             self.lastY = ypos
             xoffset *= self.sensitivity
             yoffset *= self.sensitivity
-            self.camera.rotate(glm.vec3(yoffset, xoffset, 0))
+            self.camera.transfrom.rotate(glm.vec3(yoffset, xoffset, 0))
 
     def scroll_callback(self, window, xoffset, yoffset):
-        self.camera.zoom_in(yoffset)
+        self.camera.get_component(Camera).zoom_in(yoffset)
 
     def window_main_loop(self):
-        """
-        窗体循环。调用此函数后，将持续占用当前线程，直到关闭窗体
-        :return:                None
-        """
         self.last_time = glfw.get_time()
         while not glfw.window_should_close(self.window):
             self.draw()
@@ -106,10 +98,6 @@ class GLWindow:
         glfw.terminate()  # 终止 glfw
 
     def destroy(self):
-        """
-        销毁窗体，销毁后请使用 create_window 函数重新创建
-        :return:                None
-        """
         glfw.destroy_window(self.window)
 
 

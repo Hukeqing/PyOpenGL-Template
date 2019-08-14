@@ -38,7 +38,7 @@ class uniform_array_pattern:
             self.variable_name = variable_name
             self.variable_value = variable_value
         else:
-            raise ValueError('Unknow type: ' + pattern)
+            raise ValueError('Unknown type: ' + pattern)
 
     def uniform(self, shader_program):
         if len(self.variable_value) == 1:
