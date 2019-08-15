@@ -1,31 +1,52 @@
 import time
 import glfw
-import glm
+from OpenGL.GL import *
+
 from OpenGLEngine.Component.camera import Camera
 
-class GLWindow:
-    def __init__(self, width, height, window_name='MainWindow', fps_clock=0, sensitivity=0.005):
+
+class Window:
+    def __init__(self, width, height, window_name='MainWindow', fps_clock=0, depth_mode=True):
+        """
+        The window for the Engine
+        :param width:           the width of window
+        :param height:          the height of window
+        :param window_name:     the name of window
+        :param fps_clock:       set the max fps in this window, 0 for INF
+        :param depth_mode:      is open the depth test. False for 4 dimension, True for 3 dimension
+        """
+        # window properties
         self.width = width
         self.height = height
         self.name = window_name
+        self.depth_mode = depth_mode
+        # fps
         self.fps_clock = fps_clock
         self.fps_clock_deltatime = None if fps_clock == 0 else 1 / fps_clock
         self.fps_count_number = 0
         self.fps_count_time = 0
-
+        # main object for window
         self.window = None
-        self.render = None
         self.camera = None
-
-        self.lastX = None
-        self.lastY = None
-        self.sensitivity = sensitivity
-
+        # update function
+        self.update = list()
+        # game object list
+        self.game_object_list = list()
+        # mouse properties
+        self.mouse_position = None
+        self.mouse_scroll_value = 0
+        # time
+        self.last_time = 0
+        self.delta_time = 0
+        # init window
         self.create_window()
         self.bind_io_process()
-        self.last_time = glfw.get_time()
 
     def create_window(self):
+        """
+        Private methods
+        :return:                    None
+        """
         if not glfw.init():
             raise RuntimeError('Init glfw error')
         self.window = glfw.create_window(self.width, self.height, self.name, None, None)
@@ -33,77 +54,134 @@ class GLWindow:
             glfw.terminate()
             raise RuntimeError('Init glfw error')
         glfw.make_context_current(self.window)
+        self.last_time = glfw.get_time()
+        if self.depth_mode:
+            glEnable(GL_DEPTH_TEST)
 
     def bind_io_process(self):
+        """
+        Private methods
+        :return:                    None
+        """
         glfw.set_cursor_pos_callback(self.window, self.mouse_callback)
         glfw.set_scroll_callback(self.window, self.scroll_callback)
 
     def set_window_camera(self, camera):
+        """
+        Public methods
+        set a camera for this window
+        **You must set a camera for window**
+        :return: None
+        """
         self.camera = camera
 
-    def set_render_function(self, render):
-        self.render = render
+    def add_update_function(self, func):
+        """
+        Public methods
+        add a function in a list
+        this function will be called in every frame
+        this function should not have any args
+        :param func:                function name
+        :return:                    None
+        """
+        self.update.append(func)
 
-    def input_getkey(self, deltatime):
+    def window_render(self):
+        """
+        Private methods
+        :return:                    None
+        """
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        view = self.camera.get_component(Camera).get_view_matrix()
+        projection = self.camera.get_component(Camera).projection
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        for item in self.game_object_list:
+            item.draw(view, projection)
+
+    # TODO...
+    def input_getkey(self):
         if glfw.get_key(self.window, glfw.KEY_ESCAPE) == glfw.PRESS:
-            glfw.set_window_should_close(self.window, True)
-        if glfw.get_key(self.window, glfw.KEY_W) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.forward * deltatime)
-        if glfw.get_key(self.window, glfw.KEY_S) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.forward * -deltatime)
-        if glfw.get_key(self.window, glfw.KEY_A) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.right * -deltatime)
-        if glfw.get_key(self.window, glfw.KEY_D) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.right * deltatime)
+            self.close()
+        # if glfw.get_key(self.window, glfw.KEY_W) == glfw.PRESS:
+        #     self.camera.transfrom.translate(self.camera.transfrom.forward * deltatime)
+        # if glfw.get_key(self.window, glfw.KEY_S) == glfw.PRESS:
+        #     self.camera.transfrom.translate(self.camera.transfrom.forward * -deltatime)
+        # if glfw.get_key(self.window, glfw.KEY_A) == glfw.PRESS:
+        #     self.camera.transfrom.translate(self.camera.transfrom.right * -deltatime)
+        # if glfw.get_key(self.window, glfw.KEY_D) == glfw.PRESS:
+        #     self.camera.transfrom.translate(self.camera.transfrom.right * deltatime)
 
     def draw(self):
-        delta_time = glfw.get_time() - self.last_time
+        """
+        Private methods
+        :return:                    None
+        """
+        self.delta_time = glfw.get_time() - self.last_time
         self.last_time = glfw.get_time()
-        if self.fps_clock != 0 and delta_time < self.fps_clock_deltatime:
-            time.sleep(self.fps_clock_deltatime - delta_time)
-            delta_time = self.fps_clock_deltatime
-        self.input_getkey(delta_time)
+        if self.fps_clock != 0 and self.delta_time < self.fps_clock_deltatime:
+            time.sleep(self.fps_clock_deltatime - self.delta_time)
+            self.delta_time = self.fps_clock_deltatime
+        self.input_getkey()
 
-        self.render()
+        for func in self.update:
+            func()
+        self.window_render()
 
         self.fps_count_number += 1
-        self.fps_count_time += delta_time
+        self.fps_count_time += self.delta_time
         if self.fps_count_time >= 5:
             print('fps:', self.fps_count_number / 5)
             self.fps_count_time = 0
             self.fps_count_number = 0
 
     def mouse_callback(self, window, xpos, ypos):
-        if self.lastX is None or self.lastY is None:
-            self.lastX = xpos
-            self.lastY = ypos
-        else:
-            xoffset = xpos - self.lastX
-            yoffset = self.lastY - ypos
-            self.lastX = xpos
-            self.lastY = ypos
-            xoffset *= self.sensitivity
-            yoffset *= self.sensitivity
-            self.camera.transfrom.rotate(glm.vec3(yoffset, xoffset, 0))
+        """
+        Private methods
+        :return:                    None
+        """
+        self.mouse_position = (xpos, ypos)
 
     def scroll_callback(self, window, xoffset, yoffset):
+        """
+        Private methods
+        :return:                    None
+        """
         self.camera.get_component(Camera).zoom_in(yoffset)
 
     def window_main_loop(self):
+        """
+        Public methods
+        start the window
+        :return:                    None
+        """
         self.last_time = glfw.get_time()
+        self.mouse_scroll_value = 0
         while not glfw.window_should_close(self.window):
             self.draw()
             glfw.swap_buffers(self.window)
             glfw.poll_events()
         glfw.terminate()  # 终止 glfw
 
+    def close(self):
+        """
+        Public methods
+        end the window
+        :return:                    None
+        """
+        glfw.set_window_should_close(self.window, True)
+
     def destroy(self):
+        """
+        Public methods
+        destroy the window
+        :return:                    None
+        """
         glfw.destroy_window(self.window)
 
 
 def window_test():
     try:
-        test_window = GLWindow(1, 1, 'test')
+        test_window = Window(1, 1, 'test')
         test_window.destroy()
     except RuntimeError as err:
         print('\33[31mTest on windows.py Error: ' + str(err) + '\33[0m')

@@ -6,15 +6,21 @@ from OpenGLEngine.Component.component_manager import Component_Manager
 
 
 class Transform(Component_Manager):
-    def __init__(self, game_object, position=glm.vec3(0, 0, 0), rotation=glm.vec3(0, 0, 0), scale=glm.vec3(1, 1, 1)):
+    def __init__(self, game_object, position=None, rotation=None, scale=None):
         super(Transform, self).__init__(game_object)
         self.position = position
         self.rotation = rotation
         self.scale = scale
+        if self.position is None:
+            self.position = glm.vec3(0, 0, 0)
+        if self.rotation is None:
+            self.rotation = glm.vec3(0, 0, 0)
+        if self.scale is None:
+            self.scale = glm.vec3(1, 1, 1)
 
         self.forward = None
         self.up = None
-        self.right = None
+        self.left = None
         self.get_forward()
 
         self.position_lock_alive = glm.vec3(False, False, False)
@@ -69,9 +75,13 @@ class Transform(Component_Manager):
         self.forward.x = -np.sin(glm.radians(self.rotation.y))
         self.forward.y = np.sin(glm.radians(self.rotation.x))
         self.forward.z = np.cos(glm.radians(self.rotation.x)) * np.cos(glm.radians(self.rotation.y))
+        # self.forward.x = np.cos(glm.radians(self.rotation.x)) * np.cos(glm.radians(self.rotation.y))
+        # self.forward.y = np.sin(glm.radians(self.rotation.x))
+        # self.forward.z = np.cos(glm.radians(self.rotation.x)) * np.sin(glm.radians(self.rotation.y))
+
         self.forward = glm.normalize(self.forward)
-        self.right = -glm.normalize(glm.cross(glm.vec3(0, 1, 0), self.forward))
-        self.up = -glm.normalize(glm.cross(self.forward, self.right))
+        self.left = glm.normalize(glm.cross(glm.vec3(0, 1, 0), self.forward))
+        self.up = glm.normalize(glm.cross(self.forward, self.left))
 
     def get_view_matrix(self):
         self.get_forward()

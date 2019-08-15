@@ -1,6 +1,6 @@
 import glm
 from OpenGLEngine.Component.mathF import clamp
-from OpenGLEngine.Component.gameobject import GameObject
+from OpenGLEngine.Component.game_object import GameObject
 
 
 class Camera(GameObject):

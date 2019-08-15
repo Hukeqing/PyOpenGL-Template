@@ -1,14 +1,10 @@
-from OpenGL.GL import *
 from ctypes import c_float, c_void_p, sizeof
-import numpy as np
 import PIL.Image as Image
-import glm
+import numpy as np
+from OpenGL.GL import *
 
 
 class vertices_pattern:
-    """
-    V 为坐标点，C 为颜色，T 为纹理坐标
-    """
     pattern_type = 'VCT'
 
     def __init__(self, pattern):
@@ -104,9 +100,9 @@ class Mesh:
                 glUniform1i(glGetUniformLocation(self.shader_program.shader_program, "texture" + str(index)), index)
                 glActiveTexture(GL_TEXTURE0 + index)
                 glBindTexture(GL_TEXTURE_2D, item)
-        glBindVertexArray(self.vao)
         for uniform_value in args:
             uniform_value.uniform(self.shader_program)
+        glBindVertexArray(self.vao)
         if self.ebo is not None:
             glDrawElements(self.draw_type, len(self.indices), GL_UNSIGNED_INT, None)
         else:
