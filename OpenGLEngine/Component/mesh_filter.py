@@ -26,7 +26,7 @@ class vertices_pattern:
 
 
 class MeshFilter(Component_Manager):
-    def __init__(self, game_object, vertices, vertex_format=None, indices=None, draw_type=GL_POINT):
+    def __init__(self, game_object, vertices, vertex_format=None, indices=None, draw_type=GL_TRIANGLES):
         super(MeshFilter, self).__init__(game_object)
         self.vertices = np.array(vertices, dtype=np.float32)
         self.vertex_format = vertex_format
