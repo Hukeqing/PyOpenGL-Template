@@ -21,7 +21,7 @@ class GameObject:
         new_component = component_name(self, *args, **kwargs)
         self.component_list.append(new_component)
 
-    def draw(self, view, projection):
+    def draw(self, view, projection, light):
         try:
             this_mesh_renderer = self.get_component(MeshRenderer)
         except RuntimeError:
@@ -35,19 +35,23 @@ class GameObject:
             this_mesh_renderer.use()
 
             m = glm.translate(glm.mat4(1), self.transfrom.position)
-
+            # print(m)
             m = glm.rotate(m, glm.radians(self.transfrom.rotation.x), glm.vec3(1, 0, 0))
             m = glm.rotate(m, glm.radians(self.transfrom.rotation.y), glm.vec3(0, 1, 0))
             m = glm.rotate(m, glm.radians(self.transfrom.rotation.z), glm.vec3(0, 0, 1))
-
+            # print(m)
             m = glm.scale(m, self.transfrom.scale)
-
+            # print(m, '\n')
             this_mesh_renderer.set_matrix('model', glm.value_ptr(m))
             this_mesh_renderer.set_matrix('view', glm.value_ptr(view))
             this_mesh_renderer.set_matrix('projection', glm.value_ptr(projection))
             this_mesh_renderer.un_use()
-
+        light_pos = list()
+        light_color = list()
+        for l in light:
+            light_pos.append(l.transfrom.position)
+            light_color.append(l.get_component(MeshRenderer).base_color.color)
         if this_mesh_renderer is not None:
-            this_mesh_renderer.draw(light_pos=None, light_color=None)
+            this_mesh_renderer.draw(light_pos=light_pos, light_color=light_color)
         if this_mesh_filter is not None:
             this_mesh_filter.draw()

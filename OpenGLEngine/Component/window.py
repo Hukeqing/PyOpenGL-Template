@@ -30,7 +30,7 @@ class Window:
         # main object for window
         self.window = None
         self.camera = None
-        # TODO...light
+        self.light = list()
         # update function
         self.update = list()
         # game object list
@@ -82,6 +82,16 @@ class Window:
         """
         self.camera = camera
 
+    def add_light(self, light):
+        """
+        Public methods
+        add a light in this window
+        this light will be used in every object
+        :param light:
+        :return:
+        """
+        self.light.append(light)
+
     def add_update_function(self, func):
         """
         Public methods
@@ -92,25 +102,6 @@ class Window:
         :return:                    None
         """
         self.update.append(func)
-
-    def window_render(self, view, projection):
-        """
-        Private methods
-        :param view:                view of camera
-        :param projection:          projection of camera
-        :return:                    None
-        """
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        for item in self.game_object_list:
-            item.draw(view, projection)
-
-    def input_get_key(self, key_code):
-        """
-        judge the key_code is pressed
-        :param key_code:        a static variable in class KeyCode
-        :return:                if the key_code is pressed return (True) else (False)
-        """
-        return glfw.get_key(self.window, key_code) == glfw.PRESS
 
     def draw(self):
         """
@@ -135,6 +126,25 @@ class Window:
             print('fps:', self.fps_count_number / 5)
             self.fps_count_time = 0
             self.fps_count_number = 0
+
+    def window_render(self, view, projection):
+        """
+        Private methods
+        :param view:                view of camera
+        :param projection:          projection of camera
+        :return:                    None
+        """
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        for item in self.game_object_list:
+            item.draw(view, projection, self.light)
+
+    def input_get_key(self, key_code):
+        """
+        judge the key_code is pressed
+        :param key_code:        a static variable in class KeyCode
+        :return:                if the key_code is pressed return (True) else (False)
+        """
+        return glfw.get_key(self.window, key_code) == glfw.PRESS
 
     def mouse_callback(self, window, xpos, ypos):
         """
