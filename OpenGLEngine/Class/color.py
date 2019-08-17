@@ -13,11 +13,10 @@ class Color:
     def set(self, r, g, b, a=1):
         self.color = glm.vec4(r, g, b, a)
         self.change_value()
-
-    def get_value(self):
-        return self.color
-
+    
 
 class DefaultColor:
     white = Color(1, 1, 1, 1)
     red = Color(1, 0, 0, 1)
+    green = Color(0, 1, 0, 1)
+    blue = Color(0, 0, 1, 0)

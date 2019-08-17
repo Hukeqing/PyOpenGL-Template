@@ -5,7 +5,7 @@ from OpenGLEngine.Component.component_manager import Component_Manager
 
 
 class vertices_pattern:
-    pattern_type = 'VCT'
+    pattern_type = 'VCTN'
 
     def __init__(self, pattern):
         self.types = list()

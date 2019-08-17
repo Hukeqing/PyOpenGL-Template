@@ -6,9 +6,9 @@ from OpenGLEngine.Component.transform import Transform
 
 
 class GameObject:
-    def __init__(self, name='new GameObject', position=None, rotation=None):
+    def __init__(self, name='new GameObject', position=None, rotation=None, scale=None):
         self.name = name
-        self.transfrom = Transform(self, position=position, rotation=rotation)
+        self.transfrom = Transform(self, position=position, rotation=rotation, scale=scale)
         self.component_list = [self.transfrom]
 
     def get_component(self, component_name):
@@ -48,6 +48,6 @@ class GameObject:
             this_mesh_renderer.un_use()
 
         if this_mesh_renderer is not None:
-            this_mesh_renderer.draw()
+            this_mesh_renderer.draw(light_pos=None, light_color=None)
         if this_mesh_filter is not None:
             this_mesh_filter.draw()

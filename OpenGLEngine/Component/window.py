@@ -6,6 +6,8 @@ from OpenGLEngine.Component.camera import Camera
 
 
 class Window:
+    main_window = None
+
     def __init__(self, width, height, window_name='MainWindow', fps_clock=0, depth_mode=True):
         """
         The window for the Engine
@@ -28,6 +30,7 @@ class Window:
         # main object for window
         self.window = None
         self.camera = None
+        # TODO...light
         # update function
         self.update = list()
         # game object list
@@ -41,6 +44,8 @@ class Window:
         # init window
         self.create_window()
         self.bind_io_process()
+        # DIY render
+        self.render_function = self.window_render
 
     def create_window(self):
         """
@@ -54,6 +59,7 @@ class Window:
             glfw.terminate()
             raise RuntimeError('Init glfw error')
         glfw.make_context_current(self.window)
+        Window.main_window = self.window
         self.last_time = glfw.get_time()
         if self.depth_mode:
             glEnable(GL_DEPTH_TEST)
@@ -71,7 +77,8 @@ class Window:
         Public methods
         set a camera for this window
         **You must set a camera for window**
-        :return: None
+        :camera:                the camera for this window
+        :return:                None
         """
         self.camera = camera
 
@@ -86,30 +93,24 @@ class Window:
         """
         self.update.append(func)
 
-    def window_render(self):
+    def window_render(self, view, projection):
         """
         Private methods
+        :param view:                view of camera
+        :param projection:          projection of camera
         :return:                    None
         """
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        view = self.camera.get_component(Camera).get_view_matrix()
-        projection = self.camera.get_component(Camera).projection
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for item in self.game_object_list:
             item.draw(view, projection)
 
-    # TODO...
-    def input_getkey(self):
-        if glfw.get_key(self.window, glfw.KEY_ESCAPE) == glfw.PRESS:
-            self.close()
-        # if glfw.get_key(self.window, glfw.KEY_W) == glfw.PRESS:
-        #     self.camera.transfrom.translate(self.camera.transfrom.forward * deltatime)
-        # if glfw.get_key(self.window, glfw.KEY_S) == glfw.PRESS:
-        #     self.camera.transfrom.translate(self.camera.transfrom.forward * -deltatime)
-        # if glfw.get_key(self.window, glfw.KEY_A) == glfw.PRESS:
-        #     self.camera.transfrom.translate(self.camera.transfrom.right * -deltatime)
-        # if glfw.get_key(self.window, glfw.KEY_D) == glfw.PRESS:
-        #     self.camera.transfrom.translate(self.camera.transfrom.right * deltatime)
+    def input_get_key(self, key_code):
+        """
+        judge the key_code is pressed
+        :param key_code:        a static variable in class KeyCode
+        :return:                if the key_code is pressed return (True) else (False)
+        """
+        return glfw.get_key(self.window, key_code) == glfw.PRESS
 
     def draw(self):
         """
@@ -121,11 +122,12 @@ class Window:
         if self.fps_clock != 0 and self.delta_time < self.fps_clock_deltatime:
             time.sleep(self.fps_clock_deltatime - self.delta_time)
             self.delta_time = self.fps_clock_deltatime
-        self.input_getkey()
 
-        for func in self.update:
-            func()
-        self.window_render()
+        for function_name in self.update:
+            function_name()
+        view = self.camera.get_component(Camera).get_view_matrix()
+        projection = self.camera.get_component(Camera).projection
+        self.render_function(view, projection)
 
         self.fps_count_number += 1
         self.fps_count_time += self.delta_time

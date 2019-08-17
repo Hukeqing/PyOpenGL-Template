@@ -1,5 +1,5 @@
 import glm
-from OpenGLEngine.Component.mathF import clamp
+from OpenGLEngine.Class.math_f import clamp
 from OpenGLEngine.Component.game_object import GameObject
 
 

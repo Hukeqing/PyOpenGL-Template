@@ -1,5 +1,5 @@
 import glm
-from OpenGLEngine.Component.mathF import clamp
+from OpenGLEngine.Class.math_f import clamp
 from OpenGLEngine.Component.component_manager import Component_Manager
 from OpenGLEngine.Component.transform import Transform
 

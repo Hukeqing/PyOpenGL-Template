@@ -1,7 +1,7 @@
 import glm
 import numpy as np
 
-from OpenGLEngine.Component import mathF
+from OpenGLEngine.Class import math_f
 from OpenGLEngine.Component.component_manager import Component_Manager
 
 
@@ -56,19 +56,19 @@ class Transform(Component_Manager):
 
     def position_clock(self):
         if self.position_lock_alive[0]:
-            self.position.x = mathF.clamp(self.position.x, *self.position_lock_x)
+            self.position.x = math_f.clamp(self.position.x, *self.position_lock_x)
         if self.position_lock_alive[1]:
-            self.position.y = mathF.clamp(self.position.y, *self.position_lock_y)
+            self.position.y = math_f.clamp(self.position.y, *self.position_lock_y)
         if self.position_lock_alive[2]:
-            self.position.z = mathF.clamp(self.position.z, *self.position_lock_z)
+            self.position.z = math_f.clamp(self.position.z, *self.position_lock_z)
 
     def rotation_lock(self):
         if self.rotation_lock_alive[0]:
-            self.rotation.x = mathF.clamp(self.rotation.x, *self.rotation_lock_x)
+            self.rotation.x = math_f.clamp(self.rotation.x, *self.rotation_lock_x)
         if self.rotation_lock_alive[1]:
-            self.rotation.y = mathF.clamp(self.rotation.y, *self.rotation_lock_y)
+            self.rotation.y = math_f.clamp(self.rotation.y, *self.rotation_lock_y)
         if self.rotation_lock_alive[2]:
-            self.rotation.z = mathF.clamp(self.rotation.z, *self.rotation_lock_z)
+            self.rotation.z = math_f.clamp(self.rotation.z, *self.rotation_lock_z)
 
     def get_forward(self):
         self.forward = glm.vec3(0)

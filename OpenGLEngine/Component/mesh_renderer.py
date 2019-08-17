@@ -1,8 +1,7 @@
-import glm
 from OpenGL.GL import *
 from PIL import Image
 
-from OpenGLEngine.Component.color import DefaultColor
+from OpenGLEngine.Class.color import DefaultColor
 from OpenGLEngine.Component.component_manager import Component_Manager
 
 
@@ -37,7 +36,8 @@ class MeshRenderer(Component_Manager):
                 glGenerateMipmap(GL_TEXTURE_2D)
                 return texture
 
-    def __init__(self, game_object, vertex_shader_path, fragment_shader_path, base_color=DefaultColor.white, texture_path=None):
+    def __init__(self, game_object, vertex_shader_path, fragment_shader_path, base_color=DefaultColor.white, texture_path=None,
+                 texture_mix_value=None):
         super(MeshRenderer, self).__init__(game_object)
         self.vertex_shader_path = vertex_shader_path
         self.fragment_shader_path = fragment_shader_path
@@ -46,11 +46,19 @@ class MeshRenderer(Component_Manager):
 
         self.base_color = base_color
         self.texture = list()
+        self.texture_mix_value = list()
         if isinstance(texture_path, list):
             for item in texture_path:
                 self.add_texture(item)
         elif isinstance(texture_path, str):
             self.add_texture(texture_path)
+        if isinstance(texture_mix_value, list):
+            self.texture_mix_value.extend(texture_mix_value)
+        elif isinstance(texture_mix_value, float):
+            self.texture_mix_value.append(texture_mix_value)
+        if (not (len(self.texture_mix_value) == len(self.texture) == 0)) and (len(self.texture_mix_value) + 1 != len(self.texture)):
+            raise ValueError(
+                'The lenth of texture_mix_value and texture_path must satisfy this:\nlen(self.texture_mix_value) + 1 == len(self.texture)')
 
     def init_data(self):
         # vertex shader
@@ -91,13 +99,21 @@ class MeshRenderer(Component_Manager):
     def use(self):
         glUseProgram(self.shader_program)
 
-    def draw(self):
+    def draw(self, light_pos, light_color):
         self.use()
         for index, item in enumerate(self.texture):
-            glUniform1i(glGetUniformLocation(self.shader_program, "texture" + str(index)), index)
+            glUniform1i(glGetUniformLocation(self.shader_program, 'texture' + str(index)), index)
             glActiveTexture(GL_TEXTURE0 + index)
             glBindTexture(GL_TEXTURE_2D, item.texture)
+        for index, item in enumerate(self.texture_mix_value):
+            glUniform1f(glGetUniformLocation(self.shader_program, 'mix_value' + str(index)), item)
         glUniform4f(glGetUniformLocation(self.shader_program, 'basecolor'), *self.base_color.color)
+        # TODO...light
+        # for index, item in enumerate(light_color):
+        #     glUniform3f(glGetUniformLocation(self.shader_program, 'lightColor' + str(index)), item)
+        # for index, item in enumerate(light_pos):
+        #     glUniform3f(glGetUniformLocation(self.shader_program, 'lightPos' + str(index)), item)
+
 
     @staticmethod
     def un_use():
