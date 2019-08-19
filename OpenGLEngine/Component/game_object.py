@@ -15,7 +15,8 @@ class GameObject:
         for component in self.component_list:
             if type(component) == component_name:
                 return component
-        raise RuntimeError('Component (' + component_name.__name__ + ') is not found in Object: ' + self.name)
+        return None
+        # raise RuntimeError('Component (' + component_name.__name__ + ') is not found in Object: ' + self.name)
 
     def add_component(self, component_name, *args, **kwargs):
         new_component = component_name(self, *args, **kwargs)
