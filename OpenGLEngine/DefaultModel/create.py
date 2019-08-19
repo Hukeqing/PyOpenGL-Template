@@ -96,6 +96,43 @@ class Create:
         0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
         -0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
         -0.5, 0.5, -0.5, 0.0, 1.0, 0.0]
+    cube_vertices_VTN = [
+        -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0,
+        0.5, -0.5, -0.5, 1.0, 0.0, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, -1.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0, 0.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 1.0, 0.0, 0.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 1.0, 0.0, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 1.0, 0.0, -1.0, 0.0, 0.0,
+        -0.5, 0.5, -0.5, 1.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, -1.0, 0.0, 0.0,
+        -0.5, 0.5, 0.5, 1.0, 0.0, -1.0, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, -1.0, 0.0,
+        0.5, -0.5, -0.5, 1.0, 1.0, 0.0, -1.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0, -1.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0, -1.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -1.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, -1.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0]
     quad_vertices_VT = [0.5, 0.5, 0, 1.0, 1.0,
                         0.5, -0.5, 0, 1.0, 0.0,
                         -0.5, -0.5, 0, 0.0, 0.0,
@@ -128,7 +165,7 @@ class Create:
     @staticmethod
     def quad(object_name='new Quad', position=None, rotation=None, scale=None, base_color=DefaultColor.white, texture_path=None):
         new_quad = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
-        vs = join(Create.default_vs_path, 'VT_MVP.vs')
+        vs = join(Create.default_vs_path, 'VN_MVP.vs')
         if texture_path is None:
             fs = join(Create.default_fs_path, '_C.fs')
         elif isinstance(texture_path, str):
@@ -144,8 +181,7 @@ class Create:
     def test_cube(object_name='new Cube', position=None, rotation=None, scale=None, base_color=DefaultColor.white, texture_path=None,
                   texture_mix_value=None):
         new_cube = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
-        # TODO...vs
-        vs = join(Create.default_vs_path, 'VN_MVP.vs')
+        vs = join(Create.default_vs_path, 'VTN_MVP.vs')
         if texture_path is None:
             fs = join(Create.default_fs_path, '_LC.fs')
         elif isinstance(texture_path, str):
@@ -154,5 +190,5 @@ class Create:
             fs = join(Create.default_fs_path, 'T' + str(len(texture_path)) + '_LC.fs')
         new_cube.add_component(MeshRenderer, vertex_shader_path=vs, fragment_shader_path=fs, base_color=base_color, texture_path=texture_path,
                                texture_mix_value=texture_mix_value)
-        new_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VN, vertex_format=vertices_pattern('V3N3'), draw_type=GL_TRIANGLES)
+        new_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VTN, vertex_format=vertices_pattern('V3T2N3'), draw_type=GL_TRIANGLES)
         return new_cube

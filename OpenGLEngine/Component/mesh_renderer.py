@@ -107,7 +107,7 @@ class MeshRenderer(Component_Manager):
             glBindTexture(GL_TEXTURE_2D, item.texture)
         for index, item in enumerate(self.texture_mix_value):
             glUniform1f(glGetUniformLocation(self.shader_program, 'mix_value' + str(index)), item)
-        glUniform4f(glGetUniformLocation(self.shader_program, 'basecolor'), *self.base_color.color)
+        glUniform4f(glGetUniformLocation(self.shader_program, 'basecolor'), *self.base_color.get_value())
         for index, item in enumerate(light_color):
             glUniform4f(glGetUniformLocation(self.shader_program, 'lightColor' + str(index)), *item)
         for index, item in enumerate(light_pos):

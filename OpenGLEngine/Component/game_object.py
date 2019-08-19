@@ -50,7 +50,7 @@ class GameObject:
         light_color = list()
         for l in light:
             light_pos.append(l.transfrom.position)
-            light_color.append(l.get_component(MeshRenderer).base_color.color)
+            light_color.append(l.get_component(MeshRenderer).base_color.get_value())
         if this_mesh_renderer is not None:
             this_mesh_renderer.draw(light_pos=light_pos, light_color=light_color)
         if this_mesh_filter is not None:

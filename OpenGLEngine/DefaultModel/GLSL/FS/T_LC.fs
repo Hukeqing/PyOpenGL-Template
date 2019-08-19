@@ -11,7 +11,6 @@ uniform vec4 basecolor;
 uniform vec4 lightColor0;
 uniform vec3 lightPos0;
 
-
 void main()
 {
     float ambientStrength = 0.1;

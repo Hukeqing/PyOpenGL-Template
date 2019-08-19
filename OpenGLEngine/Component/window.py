@@ -3,12 +3,13 @@ import glfw
 from OpenGL.GL import *
 
 from OpenGLEngine.Component.camera import Camera
+from OpenGLEngine.Class.color import Color
 
 
 class Window:
     main_window = None
 
-    def __init__(self, width, height, window_name='MainWindow', fps_clock=0, depth_mode=True):
+    def __init__(self, width, height, background_color=None, window_name='MainWindow', fps_clock=0, depth_mode=True, alpha_mode=True):
         """
         The window for the Engine
         :param width:           the width of window
@@ -22,6 +23,8 @@ class Window:
         self.height = height
         self.name = window_name
         self.depth_mode = depth_mode
+        self.alpha_mode = alpha_mode
+        self.background_color = Color(0, 0, 0) if background_color is None else background_color
         # fps
         self.fps_clock = fps_clock
         self.fps_clock_deltatime = None if fps_clock == 0 else 1 / fps_clock
@@ -166,6 +169,13 @@ class Window:
         start the window
         :return:                    None
         """
+        glClearColor(*self.background_color.get_value())
+        # glClearDepth(1.0)
+        # glPointSize(5)
+
+        if self.alpha_mode:
+            glEnable(GL_BLEND)  # 使透明生效
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)  # 使透明生效
         self.last_time = glfw.get_time()
         self.mouse_scroll_value = 0
         while not glfw.window_should_close(self.window):
