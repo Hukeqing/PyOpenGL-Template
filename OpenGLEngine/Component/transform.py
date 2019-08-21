@@ -1,11 +1,11 @@
 import glm
 import numpy as np
 
-from OpenGLEngine.Class import math_f
-from OpenGLEngine.Component.component_manager import Component_Manager
+from OpenGLEngine.Component.component_manager import ComponentManager
+from OpenGLEngine.Class import *
 
 
-class Transform(Component_Manager):
+class Transform(ComponentManager):
     def __init__(self, game_object, position=None, rotation=None, scale=None):
         super(Transform, self).__init__(game_object)
         self.position = position
@@ -23,12 +23,12 @@ class Transform(Component_Manager):
         self.left = None
         self.get_forward()
 
-        self.position_lock_alive = glm.vec3(False, False, False)
+        self.position_lock_alive = (False, False, False)
         self.position_lock_x = None
         self.position_lock_y = None
         self.position_lock_z = None
 
-        self.rotation_lock_alive = glm.vec3(False, False, False)
+        self.rotation_lock_alive = (False, False, False)
         self.rotation_lock_x = None
         self.rotation_lock_y = None
         self.rotation_lock_z = None

@@ -1,7 +1,7 @@
 from OpenGL.GL import *
 from ctypes import c_float, c_void_p, sizeof
 import numpy as np
-from OpenGLEngine.Component.component_manager import Component_Manager
+from OpenGLEngine.Component.component_manager import ComponentManager
 
 
 class vertices_pattern:
@@ -25,7 +25,7 @@ class vertices_pattern:
             self.count += int(pattern[index + 1])
 
 
-class MeshFilter(Component_Manager):
+class MeshFilter(ComponentManager):
     def __init__(self, game_object, vertices, vertex_format=None, indices=None, draw_type=GL_TRIANGLES):
         super(MeshFilter, self).__init__(game_object)
         self.vertices = np.array(vertices, dtype=np.float32)

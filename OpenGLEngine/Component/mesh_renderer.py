@@ -2,10 +2,10 @@ from OpenGL.GL import *
 from PIL import Image
 
 from OpenGLEngine.Class.color import DefaultColor
-from OpenGLEngine.Component.component_manager import Component_Manager
+from OpenGLEngine.Component.component_manager import ComponentManager
 
 
-class MeshRenderer(Component_Manager):
+class MeshRenderer(ComponentManager):
     """
     Texture renderer * base color
     """

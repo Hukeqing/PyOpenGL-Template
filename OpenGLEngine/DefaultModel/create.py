@@ -1,9 +1,6 @@
-from OpenGLEngine.Component.camera import Camera
-from OpenGLEngine.Component.game_object import GameObject
-from OpenGLEngine.Component.mesh_filter import MeshFilter
-from OpenGLEngine.Component.mesh_filter import vertices_pattern
-from OpenGLEngine.Component.mesh_renderer import MeshRenderer
-from OpenGLEngine.Class.color import DefaultColor
+from OpenGLEngine.Class import *
+from OpenGLEngine.Component import *
+from OpenGLEngine.DefaultModel import *
 from OpenGL.GL import *
 from os.path import join
 

@@ -49,13 +49,13 @@ class GLWindow:
         if glfw.get_key(self.window, glfw.KEY_ESCAPE) == glfw.PRESS:
             glfw.set_window_should_close(self.window, True)
         if glfw.get_key(self.window, glfw.KEY_W) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.forward * deltatime)
+            self.camera.transform.translate(self.camera.transform.forward * deltatime)
         if glfw.get_key(self.window, glfw.KEY_S) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.forward * -deltatime)
+            self.camera.transform.translate(self.camera.transform.forward * -deltatime)
         if glfw.get_key(self.window, glfw.KEY_A) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.right * -deltatime)
+            self.camera.transform.translate(self.camera.transform.right * -deltatime)
         if glfw.get_key(self.window, glfw.KEY_D) == glfw.PRESS:
-            self.camera.transfrom.translate(self.camera.transfrom.right * deltatime)
+            self.camera.transform.translate(self.camera.transform.right * deltatime)
 
     def draw(self):
         delta_time = glfw.get_time() - self.last_time
@@ -85,7 +85,7 @@ class GLWindow:
             self.lastY = ypos
             xoffset *= self.sensitivity
             yoffset *= self.sensitivity
-            self.camera.transfrom.rotate(glm.vec3(yoffset, xoffset, 0))
+            self.camera.transform.rotate(glm.vec3(yoffset, xoffset, 0))
 
     def scroll_callback(self, window, xoffset, yoffset):
         self.camera.get_component(Camera).zoom_in(yoffset)

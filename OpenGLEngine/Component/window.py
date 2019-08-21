@@ -1,22 +1,25 @@
 import time
 import glfw
 from OpenGL.GL import *
-
-from OpenGLEngine.Component.camera import Camera
-from OpenGLEngine.Class.color import Color
+from OpenGLEngine.Component import *
+from OpenGLEngine.Class import *
 
 
 class Window:
     main_window = None
 
-    def __init__(self, width, height, background_color=None, window_name='MainWindow', fps_clock=0, depth_mode=True, alpha_mode=True):
+    def __init__(self, width, height, background_color=None, window_name='MainWindow', fps_clock=0, depth_mode=True, alpha_mode=True,
+                 basic_move=None):
         """
         The window for the Engine
-        :param width:           the width of window
-        :param height:          the height of window
-        :param window_name:     the name of window
-        :param fps_clock:       set the max fps in this window, 0 for INF
-        :param depth_mode:      is open the depth test. False for 4 dimension, True for 3 dimension
+        :param width:           the width of window(int)
+        :param height:          the height of window(int)
+        :param background_color the background color in this window(Color)
+        :param window_name:     the name of window(str)
+        :param fps_clock:       set the max fps in this window, 0 for INF(int)
+        :param depth_mode:      is open the depth test. False for 4 dimension, True for 3 dimension(bool)
+        :param alpha_mode:      allow the object has alpha(bool)
+        :param basic_move:      enable the basic move by key(tuble)
         """
         # window properties
         self.width = width
@@ -44,6 +47,7 @@ class Window:
         # time
         self.last_time = 0
         self.delta_time = 0
+        self.basic_move = basic_move
         # init window
         self.create_window()
         self.bind_io_process()
@@ -137,6 +141,15 @@ class Window:
         :param projection:          projection of camera
         :return:                    None
         """
+        if self.basic_move is not None:
+            if self.input_get_key(glfw.KEY_W):
+                self.camera.transform.translate(self.camera.transform.forward * self.basic_move[0] * self.delta_time)
+            if self.input_get_key(glfw.KEY_S):
+                self.camera.transform.translate(-self.camera.transform.forward * self.basic_move[0] * self.delta_time)
+            if self.input_get_key(glfw.KEY_A):
+                self.camera.transform.rotate(-self.camera.transform.up * self.basic_move[1] * self.delta_time)
+            if self.input_get_key(glfw.KEY_D):
+                self.camera.transform.rotate(self.camera.transform.up * self.basic_move[1] * self.delta_time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for item in self.game_object_list:
             item.draw(view, projection, self.light)

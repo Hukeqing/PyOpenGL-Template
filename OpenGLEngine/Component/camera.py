@@ -1,10 +1,10 @@
 import glm
 from OpenGLEngine.Class.math_f import clamp
-from OpenGLEngine.Component.component_manager import Component_Manager
+from OpenGLEngine.Component.component_manager import ComponentManager
 from OpenGLEngine.Component.transform import Transform
 
 
-class Camera(Component_Manager):
+class Camera(ComponentManager):
     def __init__(self, game_object, window, zoom=45, near=0.3, far=1000):
         super(Camera, self).__init__(game_object)
         self.window_width = window.width

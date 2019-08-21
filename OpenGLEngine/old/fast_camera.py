@@ -26,7 +26,7 @@ class Camera(GameObject):
         self.projection = glm.perspective(glm.radians(self.zoom), self.window_width * 1.0 / self.window_height, self.near, self.far)
 
     def get_view_matrix(self):
-        return self.transfrom.get_view_matrix()
+        return self.transform.get_view_matrix()
 
     def zoom_in(self, size):
         self.zoom -= size
