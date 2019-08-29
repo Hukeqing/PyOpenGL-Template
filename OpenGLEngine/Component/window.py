@@ -143,13 +143,13 @@ class Window:
         """
         if self.basic_move is not None:
             if self.input_get_key(glfw.KEY_W):
-                self.camera.transform.translate(self.camera.transform.forward * self.basic_move[0] * self.delta_time)
+                self.camera.transform.translate(self.camera.transform.glm_forward * self.basic_move[0] * self.delta_time)
             if self.input_get_key(glfw.KEY_S):
-                self.camera.transform.translate(-self.camera.transform.forward * self.basic_move[0] * self.delta_time)
+                self.camera.transform.translate(-self.camera.transform.glm_forward * self.basic_move[0] * self.delta_time)
             if self.input_get_key(glfw.KEY_A):
-                self.camera.transform.rotate(-self.camera.transform.up * self.basic_move[1] * self.delta_time)
+                self.camera.transform.rotate(-self.camera.transform.glm_up * self.basic_move[1] * self.delta_time)
             if self.input_get_key(glfw.KEY_D):
-                self.camera.transform.rotate(self.camera.transform.up * self.basic_move[1] * self.delta_time)
+                self.camera.transform.rotate(self.camera.transform.glm_up * self.basic_move[1] * self.delta_time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for item in self.game_object_list:
             item.draw(view, projection, self.light)
