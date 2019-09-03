@@ -9,7 +9,6 @@ class MeshRenderer(ComponentManager):
     """
     Texture renderer * base color
     """
-
     class Texture:
         def __init__(self, texture_path):
             self.texture_path = texture_path
@@ -36,12 +35,13 @@ class MeshRenderer(ComponentManager):
                 glGenerateMipmap(GL_TEXTURE_2D)
                 return texture
 
-    def __init__(self, game_object, vertex_shader_path, fragment_shader_path, base_color=DefaultColor.white, texture_path=None,
-                 texture_mix_value=None):
+    def __init__(self, game_object, vertex_shader, fragment_shader, base_color=DefaultColor.white, texture_path=None,
+                 texture_mix_value=None, check=True):
         super(MeshRenderer, self).__init__(game_object)
-        self.vertex_shader_path = vertex_shader_path
-        self.fragment_shader_path = fragment_shader_path
+        self.vertex_shader = vertex_shader
+        self.fragment_shader = fragment_shader
         self.shader_program = glCreateProgram()
+        self.check_error = check
         self.init_data()
 
         self.base_color = base_color
@@ -63,11 +63,13 @@ class MeshRenderer(ComponentManager):
     def init_data(self):
         # vertex shader
         vertex_shader = glCreateShader(GL_VERTEX_SHADER)
-        MeshRenderer.compile_shader(vertex_shader, self.vertex_shader_path)
+        if self.check_error:
+            MeshRenderer.compile_shader(vertex_shader, self.vertex_shader)
 
         # fragment shader
         fragment_shader = glCreateShader(GL_FRAGMENT_SHADER)
-        MeshRenderer.compile_shader(fragment_shader, self.fragment_shader_path)
+        if self.check_error:
+            MeshRenderer.compile_shader(fragment_shader, self.fragment_shader)
         self.link_vertex_fragment_shader(vertex_shader, fragment_shader)
 
     def link_vertex_fragment_shader(self, vertex, fragment):
@@ -118,8 +120,9 @@ class MeshRenderer(ComponentManager):
         glUseProgram(0)
 
     @staticmethod
-    def compile_shader(shader, source):
-        glShaderSource(shader, MeshRenderer.load_shader_source(source))
+    def compile_shader(shader, shader_code):
+        # glShaderSource(shader, MeshRenderer.load_shader_source(source))
+        glShaderSource(shader, shader_code)
         glCompileShader(shader)
         MeshRenderer.check_shader_error(shader)
 

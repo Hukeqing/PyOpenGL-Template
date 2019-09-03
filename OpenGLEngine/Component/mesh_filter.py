@@ -15,7 +15,7 @@ class vertices_pattern:
         if not isinstance(pattern, str):
             raise ValueError('Pattern Error: "' + pattern + '" is not a str')
         if len(pattern) % 2 != 0 or len(pattern) <= 0:
-            raise ValueError('Pattern Error: the lenth of "' + pattern + '" is not a positive even number!')
+            raise ValueError('Pattern Error: the length of "' + pattern + '" is not a positive even number!')
         for index in range(0, len(pattern), 2):
             if not pattern[index] in vertices_pattern.pattern_type:
                 raise ValueError('Unknown type: ' + pattern[index])

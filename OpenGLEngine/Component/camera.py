@@ -1,7 +1,7 @@
 import glm
-from OpenGLEngine.Class.math_f import clamp
 from OpenGLEngine.Component.component_manager import ComponentManager
 from OpenGLEngine.Component.transform import Transform
+from OpenGLEngine.Class import *
 
 
 class Camera(ComponentManager):
@@ -24,7 +24,7 @@ class Camera(ComponentManager):
         self.zoom_in_clock_value = zoom_in
 
     def get_projection(self):
-        self.projection = glm.perspective(glm.radians(self.zoom), self.window_width * 1.0 / self.window_height, self.near, self.far)
+        self.projection = glm.perspective(math_f.radians(self.zoom), self.window_width * 1.0 / self.window_height, self.near, self.far)
 
     def get_view_matrix(self):
         return self.get_component(Transform).get_view_matrix()
@@ -36,4 +36,4 @@ class Camera(ComponentManager):
 
     def zoom_in_clock(self):
         if self.zoom_in_clock_alive:
-            self.zoom = clamp(self.zoom, *self.zoom_in_clock_value)
+            self.zoom = math_f.clamp(self.zoom, *self.zoom_in_clock_value)

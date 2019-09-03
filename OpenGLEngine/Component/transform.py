@@ -1,6 +1,3 @@
-import glm
-import numpy as np
-
 from OpenGLEngine.Component.component_manager import ComponentManager
 from OpenGLEngine.Class import *
 
@@ -13,29 +10,14 @@ class Transform(ComponentManager):
         self.scale = scale
 
         if self.position is None:
-            self.position = glm.vec3(0, 0, 0)
-        elif isinstance(self.position, Vector3):
-            self.position = glm.vec3(self.position.get_value())
-        else:
-            self.position = glm.vec3(*self.position)
+            self.position = Vector3(0, 0, 0)
 
         if self.rotation is None:
-            self.rotation = glm.vec3(0, 0, 0)
-        elif isinstance(self.rotation, Vector3):
-            self.rotation = glm.vec3(self.rotation.get_value())
-        else:
-            self.rotation = glm.vec3(*self.rotation)
+            self.rotation = Vector3(0, 0, 0)
 
         if self.scale is None:
-            self.scale = glm.vec3(1, 1, 1)
-        elif isinstance(self.scale, Vector3):
-            self.scale = glm.vec3(self.scale.get_value())
-        else:
-            self.scale = glm.vec3(*self.scale)
+            self.scale = Vector3(1, 1, 1)
 
-        self.glm_forward = None
-        self.glm_left = None
-        self.glm_up = None
         self.forward = None
         self.left = None
         self.up = None
@@ -89,22 +71,18 @@ class Transform(ComponentManager):
             self.rotation.z = math_f.clamp(self.rotation.z, *self.rotation_lock_z)
 
     def get_forward(self):
-        self.glm_forward = glm.vec3(0)
-        self.glm_forward.x = -np.sin(glm.radians(self.rotation.y))
-        self.glm_forward.y = np.sin(glm.radians(self.rotation.x))
-        self.glm_forward.z = np.cos(glm.radians(self.rotation.x)) * np.cos(glm.radians(self.rotation.y))
+        self.forward = Vector3(0)
+        self.forward.x = -math_f.sin(math_f.radians(self.rotation.y))
+        self.forward.y = math_f.sin(math_f.radians(self.rotation.x))
+        self.forward.z = math_f.cos(math_f.radians(self.rotation.x)) * math_f.cos(math_f.radians(self.rotation.y))
         # self.forward.x = np.cos(glm.radians(self.rotation.x)) * np.cos(glm.radians(self.rotation.y))
         # self.forward.y = np.sin(glm.radians(self.rotation.x))
         # self.forward.z = np.cos(glm.radians(self.rotation.x)) * np.sin(glm.radians(self.rotation.y))
 
-        self.glm_forward = glm.normalize(self.glm_forward)
-        self.glm_left = glm.normalize(glm.cross(glm.vec3(0, 1, 0), self.glm_forward))
-        self.glm_up = glm.normalize(glm.cross(self.glm_forward, self.glm_left))
-
-        self.forward = Vector3(self.glm_forward)
-        self.left = Vector3(self.glm_left)
-        self.up = Vector3(self.glm_up)
+        self.forward = Vector3.normalize(self.forward)
+        self.left = Vector3.normalize(Vector3.cross(Vector3(0, 1, 0), self.forward))
+        self.up = Vector3.normalize(Vector3.cross(self.forward, self.left))
 
     def get_view_matrix(self):
         self.get_forward()
-        return glm.lookAt(self.position, self.position + self.glm_forward, self.glm_up)
+        return Vector3.lookAt(self.position, self.position + self.forward, self.up)
