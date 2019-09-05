@@ -9,8 +9,9 @@ class MeshRenderer(ComponentManager):
     """
     Texture renderer * base color
     """
+
     class Texture:
-        def __init__(self, texture_path):
+        def __init__(self, texture_path: str):
             self.texture_path = texture_path
             self.texture = self.open_texture()
 
@@ -77,7 +78,7 @@ class MeshRenderer(ComponentManager):
         glAttachShader(self.shader_program, fragment)
         glLinkProgram(self.shader_program)
         message = glGetProgramInfoLog(self.shader_program)
-        print("program link error: ", message) if message else print('program link success')
+        print(self.game_object.name + "'s program link error: ", message) if message else print(self.game_object.name + "'s program link success")
 
     def add_texture(self, new_texture_path):
         self.texture.append(self.Texture(new_texture_path))

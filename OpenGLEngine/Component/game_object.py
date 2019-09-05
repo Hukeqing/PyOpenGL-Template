@@ -1,8 +1,8 @@
 import glm
-
+from typing import Optional
+from OpenGLEngine.Component.transform import Transform
 from OpenGLEngine.Component.mesh_filter import MeshFilter
 from OpenGLEngine.Component.mesh_renderer import MeshRenderer
-from OpenGLEngine.Component.transform import Transform
 
 
 class GameObject:
@@ -24,11 +24,11 @@ class GameObject:
 
     def draw(self, view, projection, light):
         try:
-            this_mesh_renderer = self.get_component(MeshRenderer)
+            this_mesh_renderer: Optional[MeshRenderer] = self.get_component(MeshRenderer)
         except RuntimeError:
             this_mesh_renderer = None
         try:
-            this_mesh_filter = self.get_component(MeshFilter)
+            this_mesh_filter: Optional[MeshFilter] = self.get_component(MeshFilter)
         except RuntimeError:
             this_mesh_filter = None
 

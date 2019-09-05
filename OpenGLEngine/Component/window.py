@@ -1,15 +1,21 @@
 import time
 import glfw
+from typing import Optional, Union, Callable, List, Tuple
 from OpenGL.GL import *
 from OpenGLEngine.Component import *
 from OpenGLEngine.Class import *
 
 
 class Window:
-    main_window = None
-
-    def __init__(self, width, height, background_color=None, window_name='MainWindow', fps_clock=0, depth_mode=True, alpha_mode=True,
-                 basic_move=None):
+    def __init__(self,
+                 width: int,
+                 height: int,
+                 window_name: Optional[str] = 'MainWindow',
+                 background_color: Optional[Color] = None,
+                 fps_clock: int = 0,
+                 depth_mode: bool = True,
+                 alpha_mode: bool = True,
+                 basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float]], List[Union[int, float]]]] = None):
         """
         The window for the Engine
         :param width:           the width of window(int)
@@ -22,32 +28,32 @@ class Window:
         :param basic_move:      enable the basic move by key(tuble)
         """
         # window properties
-        self.width = width
-        self.height = height
-        self.name = window_name
-        self.depth_mode = depth_mode
-        self.alpha_mode = alpha_mode
-        self.background_color = Color(0, 0, 0) if background_color is None else background_color
+        self.width: int = width
+        self.height: int = height
+        self.name: str = window_name
+        self.depth_mode: bool = depth_mode
+        self.alpha_mode: bool = alpha_mode
+        self.background_color: Color = Color(0, 0, 0) if background_color is None else background_color
         # fps
-        self.fps_clock = fps_clock
-        self.fps_clock_deltatime = None if fps_clock == 0 else 1 / fps_clock
-        self.fps_count_number = 0
-        self.fps_count_time = 0
+        self.fps_clock: int = fps_clock
+        self.fps_clock_deltatime: float = None if fps_clock == 0 else 1 / fps_clock
+        self.fps_count_number: int = 0
+        self.fps_count_time: int = 0
         # main object for window
-        self.window = None
-        self.camera = None
-        self.light = list()
+        self.window: object = None
+        self.camera: GameObject
+        self.light: List[GameObject] = list()
         # update function
-        self.update = list()
+        self.update: List[Callable[[], bool]] = list()
         # game object list
-        self.game_object_list = list()
+        self.game_object_list: List[GameObject] = list()
         # mouse properties
-        self.mouse_position = None
-        self.mouse_scroll_value = 0
+        self.mouse_position: Tuple[int, int] = (0, 0)
+        self.mouse_scroll_value: int = 0
         # time
-        self.last_time = 0
-        self.delta_time = 0
-        self.basic_move = basic_move
+        self.last_time: int = 0
+        self.delta_time: float = 0
+        self.basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float]], List[Union[int, float], Union[int, float]]]] = basic_move
         # init window
         self.create_window()
         self.bind_io_process()
@@ -79,7 +85,7 @@ class Window:
         glfw.set_cursor_pos_callback(self.window, self.mouse_callback)
         glfw.set_scroll_callback(self.window, self.scroll_callback)
 
-    def set_window_camera(self, camera):
+    def set_window_camera(self, camera: GameObject):
         """
         Public methods
         set a camera for this window
@@ -89,7 +95,7 @@ class Window:
         """
         self.camera = camera
 
-    def add_light(self, light):
+    def add_light(self, light: GameObject):
         """
         Public methods
         add a light in this window
@@ -99,7 +105,7 @@ class Window:
         """
         self.light.append(light)
 
-    def add_update_function(self, update):
+    def add_update_function(self, update: Callable[[], bool]):
         """
         Public methods
         add a function in a list
@@ -122,8 +128,9 @@ class Window:
             self.delta_time = self.fps_clock_deltatime
 
         for function_name in self.update:
-            function_name()
-        view = self.camera.get_component(Camera).get_view_matrix()
+            if not function_name():
+                raise RuntimeError('Function ' + function_name.__name__ + ' runtime error')
+        view = self.camera.transform.get_view_matrix()
         projection = self.camera.get_component(Camera).projection
         self.render_function(view, projection)
 
@@ -175,6 +182,7 @@ class Window:
         :return:                    None
         """
         self.camera.get_component(Camera).zoom_in(yoffset)
+        self.mouse_scroll_value += yoffset
 
     def window_main_loop(self):
         """
@@ -218,8 +226,8 @@ def window_test():
     try:
         test_window = Window(1, 1, 'test')
         test_window.destroy()
-    except RuntimeError as err:
-        print('\33[31mTest on windows.py Error: ' + str(err) + '\33[0m')
+    except RuntimeError as error_str:
+        print('\33[31mTest on windows.py Error: ' + str(error_str) + '\33[0m')
     else:
         print('\33[32mOK\33[0m')
 

@@ -126,6 +126,5 @@ dmypy.json
 # Mauve local
 .idea/
 test*.*
-last*.*
 *.whl
 *.jpg
