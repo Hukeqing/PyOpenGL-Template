@@ -3,7 +3,7 @@ import glfw
 from typing import Optional, Union, Callable, List, Tuple
 from OpenGL.GL import *
 from OpenGLEngine.Component import *
-from OpenGLEngine.Class import *
+from OpenGLEngine.Built_inClass import *
 
 
 class Window:
@@ -41,8 +41,8 @@ class Window:
         self.fps_count_time: int = 0
         # main object for window
         self.window: object = None
-        self.camera: GameObject
-        self.light: List[GameObject] = list()
+        self.camera: Optional[GameObject] = None
+        self.light: Optional[GameObject] = None
         # update function
         self.update: List[Callable[[], bool]] = list()
         # game object list
@@ -61,10 +61,6 @@ class Window:
         self.render_function = self.window_render
 
     def create_window(self):
-        """
-        Private methods
-        :return:                    None
-        """
         if not glfw.init():
             raise RuntimeError('Init glfw error')
         self.window = glfw.create_window(self.width, self.height, self.name, None, None)
@@ -78,49 +74,19 @@ class Window:
             glEnable(GL_DEPTH_TEST)
 
     def bind_io_process(self):
-        """
-        Private methods
-        :return:                    None
-        """
         glfw.set_cursor_pos_callback(self.window, self.mouse_callback)
         glfw.set_scroll_callback(self.window, self.scroll_callback)
 
     def set_window_camera(self, camera: GameObject):
-        """
-        Public methods
-        set a camera for this window
-        **You must set a camera for window**
-        :camera:                the camera for this window
-        :return:                None
-        """
         self.camera = camera
 
-    def add_light(self, light: GameObject):
-        """
-        Public methods
-        add a light in this window
-        this light will be used in every object
-        :param light:
-        :return:
-        """
-        self.light.append(light)
+    def set_light(self, light: GameObject):
+        self.light = light
 
     def add_update_function(self, update: Callable[[], bool]):
-        """
-        Public methods
-        add a function in a list
-        this function will be called in every frame
-        this function should not have any args
-        :param update:                function name
-        :return:                    None
-        """
         self.update.append(update)
 
     def draw(self):
-        """
-        Private methods
-        :return:                    None
-        """
         self.delta_time = glfw.get_time() - self.last_time
         self.last_time = glfw.get_time()
         if self.fps_clock != 0 and self.delta_time < self.fps_clock_deltatime:
@@ -142,12 +108,6 @@ class Window:
             self.fps_count_number = 0
 
     def window_render(self, view, projection):
-        """
-        Private methods
-        :param view:                view of camera
-        :param projection:          projection of camera
-        :return:                    None
-        """
         if self.basic_move is not None:
             if self.input_get_key(glfw.KEY_W):
                 self.camera.transform.translate(self.camera.transform.forward * self.basic_move[0] * self.delta_time)
@@ -159,37 +119,19 @@ class Window:
                 self.camera.transform.rotate(self.camera.transform.up * self.basic_move[1] * self.delta_time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for item in self.game_object_list:
-            item.draw(view, projection, self.light)
+            item.draw(view, projection, self.light, self.camera.transform.position)
 
     def input_get_key(self, key_code):
-        """
-        judge the key_code is pressed
-        :param key_code:        a static variable in class KeyCode
-        :return:                if the key_code is pressed return (True) else (False)
-        """
         return glfw.get_key(self.window, key_code) == glfw.PRESS
 
     def mouse_callback(self, window, xpos, ypos):
-        """
-        Private methods
-        :return:                    None
-        """
         self.mouse_position = (xpos, ypos)
 
     def scroll_callback(self, window, xoffset, yoffset):
-        """
-        Private methods
-        :return:                    None
-        """
         self.camera.get_component(Camera).zoom_in(yoffset)
         self.mouse_scroll_value += yoffset
 
     def window_main_loop(self):
-        """
-        Public methods
-        start the window
-        :return:                    None
-        """
         glClearColor(*self.background_color.get_value())
         # glClearDepth(1.0)
         # glPointSize(5)
@@ -206,19 +148,9 @@ class Window:
         glfw.terminate()  # 终止 glfw
 
     def close(self):
-        """
-        Public methods
-        end the window
-        :return:                    None
-        """
         glfw.set_window_should_close(self.window, True)
 
     def destroy(self):
-        """
-        Public methods
-        destroy the window
-        :return:                    None
-        """
         glfw.destroy_window(self.window)
 
 

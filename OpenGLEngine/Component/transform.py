@@ -1,5 +1,5 @@
 from OpenGLEngine.Component.component_manager import ComponentManager
-from OpenGLEngine.Class import *
+from OpenGLEngine.Built_inClass import *
 
 
 class Transform(ComponentManager):

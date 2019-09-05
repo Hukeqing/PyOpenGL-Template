@@ -1,3 +1,4 @@
+pywavefront
 PyGLM
 Pillow
 numpy

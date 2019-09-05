@@ -1,7 +1,7 @@
 from OpenGL.GL import *
 from PIL import Image
 
-from OpenGLEngine.Class.color import DefaultColor
+from OpenGLEngine.Class.material import DefaultMaterial, Material
 from OpenGLEngine.Component.component_manager import ComponentManager
 
 
@@ -36,7 +36,7 @@ class MeshRenderer(ComponentManager):
                 glGenerateMipmap(GL_TEXTURE_2D)
                 return texture
 
-    def __init__(self, game_object, vertex_shader, fragment_shader, base_color=DefaultColor.white, texture_path=None,
+    def __init__(self, game_object, vertex_shader, fragment_shader, base_color: Material = DefaultMaterial, texture_path=None,
                  texture_mix_value=None, check=True):
         super(MeshRenderer, self).__init__(game_object)
         self.vertex_shader = vertex_shader
@@ -102,19 +102,27 @@ class MeshRenderer(ComponentManager):
     def use(self):
         glUseProgram(self.shader_program)
 
-    def draw(self, light_pos, light_color):
+    def draw(self, light_view):
         self.use()
-        for index, item in enumerate(self.texture):
-            glUniform1i(glGetUniformLocation(self.shader_program, 'texture' + str(index)), index)
-            glActiveTexture(GL_TEXTURE0 + index)
-            glBindTexture(GL_TEXTURE_2D, item.texture)
+        # material
+        glUniform4f(glGetUniformLocation(self.shader_program, 'material.color'), *self.base_color.color.get_value())
+        glUniform1f(glGetUniformLocation(self.shader_program, 'material.ambientStrength'), self.base_color.ambientStrength)
+        glUniform1f(glGetUniformLocation(self.shader_program, 'material.specularStrength'), self.base_color.specular_strength)
+        glUniform1i(glGetUniformLocation(self.shader_program, 'material.shininess'), self.base_color.shininess)
+        # texture
+        if len(self.texture) > 0:
+            glUniform1i(glGetUniformLocation(self.shader_program, 'texture'), 0)
+            for index, item in enumerate(self.texture):
+                glUniform1i(glGetUniformLocation(self.shader_program, 'texture' + str(index - 1) + '.texture'), index)
+                glActiveTexture(GL_TEXTURE0 + index)
+                glBindTexture(GL_TEXTURE_2D, item.texture)
         for index, item in enumerate(self.texture_mix_value):
-            glUniform1f(glGetUniformLocation(self.shader_program, 'mix_value' + str(index)), item)
-        glUniform4f(glGetUniformLocation(self.shader_program, 'basecolor'), *self.base_color.get_value())
-        for index, item in enumerate(light_color):
-            glUniform4f(glGetUniformLocation(self.shader_program, 'lightColor' + str(index)), *item)
-        for index, item in enumerate(light_pos):
-            glUniform3f(glGetUniformLocation(self.shader_program, 'lightPos' + str(index)), *item)
+            glUniform1f(glGetUniformLocation(self.shader_program, 'texture' + str(index) + '.mix_value'), item)
+        # light
+        if light_view is not None:
+            glUniform3f(glGetUniformLocation(self.shader_program, 'light.position'), *(light_view[0]))
+            glUniform4f(glGetUniformLocation(self.shader_program, 'light.color'), *(light_view[1].get_value()))
+            glUniform3f(glGetUniformLocation(self.shader_program, 'viewPos'), *(light_view[2]))
 
     @staticmethod
     def un_use():
@@ -125,6 +133,7 @@ class MeshRenderer(ComponentManager):
         # glShaderSource(shader, MeshRenderer.load_shader_source(source))
         glShaderSource(shader, shader_code)
         glCompileShader(shader)
+        # print(shader_code)
         MeshRenderer.check_shader_error(shader)
 
     @staticmethod
