@@ -50,20 +50,20 @@
 ## 仓库目录结构(2019.9.5)
 
 <pre>
-PyOpenGL-Template\
+PyOpenGL-Template/
 |----.gitignore
-|----OpenGLEngine\
+|----OpenGLEngine/
 |    |----__init__.py
-|    |----Built_inClass\
+|    |----Built_inClass/
 |    |    |----__init__.py
 |    |    |----color.py
 |    |    |----keycode.py
 |    |    |----math_f.py
 |    |    |----vector3.py
-|    |----Class\
+|    |----Class/
 |    |    |----__init__.py
 |    |    |----material.py
-|    |----Component\
+|    |----Component/
 |    |    |----__init__.py
 |    |    |----camera.py
 |    |    |----component_manager.py
@@ -72,19 +72,33 @@ PyOpenGL-Template\
 |    |    |----mesh_renderer.py
 |    |    |----transform.py
 |    |    |----window.py
-|    |----DefaultModel\
+|    |----DefaultModel/
 |    |    |----__init__.py
 |    |    |----create.py
 |    |    |----GLSL.py
-|    |----Demo\
+|    |----Demo/
 |    |    |----__init__.py
 |    |    |----SourceCode.py
-|    |----Test\
+|    |----Test/
 |    |    |----__init__.py
 |    |    |----DefaultModelTest.py
 |----README.md
 |----requirements.txt
 |----unit_test.py
 </pre>
+
+## 渲染逻辑
+
+```
+Run Window.window_main_loop()
+ + Window
+ - set base variables
+ - while Window not close:
+   - Call Window.draw()
+     - set delta_time
+     - Call Update()
+     - Call Window.render_function()(Default)
+     - Call GameObject.draw() in Window.game_object_list
+```
 
 ## 使用指南(暂略)

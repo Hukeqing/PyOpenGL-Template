@@ -15,7 +15,7 @@ class Window:
                  fps_clock: int = 0,
                  depth_mode: bool = True,
                  alpha_mode: bool = True,
-                 basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float]], List[Union[int, float]]]] = None):
+                 basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = None):
         """
         The window for the Engine
         :param width:           the width of window(int)
@@ -25,7 +25,7 @@ class Window:
         :param fps_clock:       set the max fps in this window, 0 for INF(int)
         :param depth_mode:      is open the depth test. False for 4 dimension, True for 3 dimension(bool)
         :param alpha_mode:      allow the object has alpha(bool)
-        :param basic_move:      enable the basic move by key(tuble)
+        :param basic_move:      enable the basic move by key(tuple, list)
         """
         # window properties
         self.width: int = width
@@ -53,7 +53,7 @@ class Window:
         # time
         self.last_time: int = 0
         self.delta_time: float = 0
-        self.basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float]], List[Union[int, float], Union[int, float]]]] = basic_move
+        self.basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = basic_move
         # init window
         self.create_window()
         self.bind_io_process()
@@ -128,7 +128,8 @@ class Window:
         self.mouse_position = (xpos, ypos)
 
     def scroll_callback(self, window, xoffset, yoffset):
-        self.camera.get_component(Camera).zoom_in(yoffset)
+        if self.basic_move is not None:
+            self.camera.get_component(Camera).zoom_in(yoffset * self.basic_move[2])
         self.mouse_scroll_value += yoffset
 
     def window_main_loop(self):

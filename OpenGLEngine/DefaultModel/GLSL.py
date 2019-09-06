@@ -133,5 +133,5 @@ uniform Light light;
 
 
 if __name__ == '__main__':
-    test = fs_maker(0, False)
+    test = fs_maker(2, True)
     print(test.get_data())

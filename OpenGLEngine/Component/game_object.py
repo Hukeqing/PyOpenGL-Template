@@ -43,7 +43,7 @@ class GameObject:
         light_view = None
         if light is not None:
             light_pos: Vector3 = light.transform.position
-            light_color: Color = light.get_component(MeshRenderer).base_color.color
+            light_color: Color = light.get_component(MeshRenderer).material.color
             light_view = (light_pos, light_color, view_position)
         if this_mesh_renderer is not None:
             this_mesh_renderer.draw(light_view=light_view)

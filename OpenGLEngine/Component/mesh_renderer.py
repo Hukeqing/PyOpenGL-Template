@@ -36,7 +36,7 @@ class MeshRenderer(ComponentManager):
                 glGenerateMipmap(GL_TEXTURE_2D)
                 return texture
 
-    def __init__(self, game_object, vertex_shader, fragment_shader, base_color: Material = DefaultMaterial, texture_path=None,
+    def __init__(self, game_object, vertex_shader, fragment_shader, material: Material = DefaultMaterial, texture_path=None,
                  texture_mix_value=None, check=True):
         super(MeshRenderer, self).__init__(game_object)
         self.vertex_shader = vertex_shader
@@ -45,7 +45,7 @@ class MeshRenderer(ComponentManager):
         self.check_error = check
         self.init_data()
 
-        self.base_color = base_color
+        self.material = material
         self.texture = list()
         self.texture_mix_value = list()
         if isinstance(texture_path, list):
@@ -94,7 +94,7 @@ class MeshRenderer(ComponentManager):
         del self.texture[index]
 
     def set_color(self, new_color):
-        self.base_color = new_color
+        self.material = new_color
 
     def set_matrix(self, uniform_name, value, transpose=GL_FALSE):
         glUniformMatrix4fv(glGetUniformLocation(self.shader_program, uniform_name), 1, transpose, value)
@@ -105,10 +105,10 @@ class MeshRenderer(ComponentManager):
     def draw(self, light_view):
         self.use()
         # material
-        glUniform4f(glGetUniformLocation(self.shader_program, 'material.color'), *self.base_color.color.get_value())
-        glUniform1f(glGetUniformLocation(self.shader_program, 'material.ambientStrength'), self.base_color.ambientStrength)
-        glUniform1f(glGetUniformLocation(self.shader_program, 'material.specularStrength'), self.base_color.specular_strength)
-        glUniform1i(glGetUniformLocation(self.shader_program, 'material.shininess'), self.base_color.shininess)
+        glUniform4f(glGetUniformLocation(self.shader_program, 'material.color'), *self.material.color.get_value())
+        glUniform1f(glGetUniformLocation(self.shader_program, 'material.ambientStrength'), self.material.ambientStrength)
+        glUniform1f(glGetUniformLocation(self.shader_program, 'material.specularStrength'), self.material.specular_strength)
+        glUniform1i(glGetUniformLocation(self.shader_program, 'material.shininess'), self.material.shininess)
         # texture
         if len(self.texture) > 0:
             glUniform1i(glGetUniformLocation(self.shader_program, 'texture'), 0)
