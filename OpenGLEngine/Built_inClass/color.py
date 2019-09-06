@@ -15,6 +15,12 @@ class Color:
         else:
             return self.r, self.g, self.b, self.a
 
+    def get_3_value(self):
+        if self.mode:
+            return self.r / 255, self.g / 255, self.b / 255
+        else:
+            return self.r, self.g, self.b
+
 
 class DefaultColor:
     white = Color(1, 1, 1, 1)

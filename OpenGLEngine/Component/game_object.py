@@ -15,7 +15,7 @@ class GameObject:
 
     def get_component(self, component_name):
         for component in self.component_list:
-            if type(component) == component_name:
+            if type(component) == component_name or type(component).__name__ == component_name:
                 return component
         warnings.warn('GameObject: ' + self.name + 'do not have component: ' + component_name.__name__)
         return None
@@ -27,7 +27,7 @@ class GameObject:
     def draw(self, view, projection, light, view_position):
         this_mesh_renderer: Optional[MeshRenderer] = self.get_component(MeshRenderer)
         this_mesh_filter: Optional[MeshFilter] = self.get_component(MeshFilter)
-
+        # TODO...
         if this_mesh_renderer is not None:
             this_mesh_renderer.use()
 
@@ -40,12 +40,8 @@ class GameObject:
             this_mesh_renderer.set_matrix('view', glm.value_ptr(view))
             this_mesh_renderer.set_matrix('projection', glm.value_ptr(projection))
             this_mesh_renderer.un_use()
-        light_view = None
-        if light is not None:
-            light_pos: Vector3 = light.transform.position
-            light_color: Color = light.get_component(MeshRenderer).material.color
-            light_view = (light_pos, light_color, view_position)
+
         if this_mesh_renderer is not None:
-            this_mesh_renderer.draw(light_view=light_view)
+            this_mesh_renderer.draw(light_tuple=light, view_position=view_position)
         if this_mesh_filter is not None:
             this_mesh_filter.draw()

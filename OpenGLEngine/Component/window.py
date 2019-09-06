@@ -1,9 +1,14 @@
 import time
-import glfw
 from typing import Optional, Union, Callable, List, Tuple
+
+import glfw
 from OpenGL.GL import *
-from OpenGLEngine.Component import *
+
 from OpenGLEngine.Built_inClass import *
+from OpenGLEngine.Component import *
+from OpenGLEngine.Component.direction_light import DirectionLight
+from OpenGLEngine.Component.point_light import PointLight
+from OpenGLEngine.Component.spot_light import SpotLight
 
 
 class Window:
@@ -42,7 +47,10 @@ class Window:
         # main object for window
         self.window: object = None
         self.camera: Optional[GameObject] = None
-        self.light: Optional[GameObject] = None
+        self.direction_light: List[GameObject] = list()
+        self.point_light: List[GameObject] = list()
+        self.spot_light: List[GameObject] = list()
+        self.light: Tuple[List[GameObject], List[GameObject], List[GameObject]] = (self.direction_light, self.point_light, self.spot_light)
         # update function
         self.update: List[Callable[[], bool]] = list()
         # game object list
@@ -81,7 +89,14 @@ class Window:
         self.camera = camera
 
     def set_light(self, light: GameObject):
-        self.light = light
+        if light.get_component(DirectionLight) is not None:
+            self.direction_light.append(light)
+        elif light.get_component(PointLight) is not None:
+            self.point_light.append(light)
+        elif light.get_component(SpotLight) is not None:
+            self.spot_light.append(light)
+        else:
+            raise ValueError('This is not a Light')
 
     def add_update_function(self, update: Callable[[], bool]):
         self.update.append(update)

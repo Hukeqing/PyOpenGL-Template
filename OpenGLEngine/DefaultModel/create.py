@@ -183,14 +183,13 @@ class Create:
         new_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VT, vertex_format='V3T2', indices=Create.quad_indices_VT,
                                draw_type=GL_TRIANGLES)
 
+    # TODO...
     @staticmethod
-    def cube(object_name='new Cube', position=None, rotation=None, scale=None, material=DefaultMaterial, texture_path=None,
-             texture_mix_value=None):
+    def cube(object_name='new Cube', position=None, rotation=None, scale=None, material=DefaultMaterial):
         new_cube = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
         vs = GLSL.vs_maker('VTN', True).data
-        fs = GLSL.fs_maker(len(texture_path), True).data
-        new_cube.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material, texture_path=texture_path,
-                               texture_mix_value=texture_mix_value)
+        fs = GLSL.fs_maker(0, True).data
+        new_cube.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
         new_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VTN, vertex_format='V3T2N3', draw_type=GL_TRIANGLES)
         return new_cube
 
@@ -215,6 +214,12 @@ class Create:
                                 texture_mix_value=None)
         new_light.add_component(MeshFilter, vertices=Create.cube_vertices_VT, vertex_format='V3T2', draw_type=GL_TRIANGLES)
         return new_light
+
+    @staticmethod
+    def direction_light(object_name='new Direction Light', rotation=None, ambient=0.1, diffuse=0.5, specular=0.5, color=None):
+        new_direction_light = GameObject(name=object_name, position=None, rotation=rotation, scale=None)
+        new_direction_light.add_component(DirectionLight, ambient=ambient, diffuse=diffuse, specular=specular, color=color)
+        return new_direction_light
 
     @staticmethod
     def obj_object(obj_path: str, object_name='new obj Object', position=None, rotation=None, scale=None, material=DefaultColor.white):
