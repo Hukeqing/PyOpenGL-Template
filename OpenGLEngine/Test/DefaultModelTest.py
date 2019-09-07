@@ -4,8 +4,8 @@ from OpenGLEngine.DefaultModel import *
 
 class TestDefaultModelTest(unittest.TestCase):
     def test_vs_maker(self):
-        test_vs = GLSL.vs_maker('VTN', three_dimensional=True)
-        self.assertEqual(test_vs.data, '''#version 330 core
+        test_vs = GLSL.GLSL_maker.get_vs('VTN', three_dimensional=True)
+        self.assertEqual(test_vs, '''#version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 2) in vec3 aNormal;

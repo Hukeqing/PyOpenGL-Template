@@ -19,7 +19,7 @@ struct Material {
     int useSampler;
 
     int texture_number;
-    Texture textures[14];
+    Texture textures[___set_texture_number];
 };
 
 struct TestureMaterial {
@@ -70,13 +70,13 @@ uniform vec3 viewPos;
 TestureMaterial texture_material;
 
 uniform int dirLight_number;
-uniform DirLight dirLights[2];
+uniform DirLight dirLights[___set_max_dir_light_number];
 
 uniform int pointLight_number;
-uniform PointLight pointLights[10];
+uniform PointLight pointLights[___set_max_point_light_number];
 
 uniform int spotLight_number;
-uniform SpotLight spotLights[5];
+uniform SpotLight spotLights[___set_max_spot_lights];
 
 // function prototypes
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);

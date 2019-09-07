@@ -18,7 +18,7 @@ class GameObject:
         for component in self.component_list:
             if type(component) == component_name or type(component).__name__ == component_name:
                 return component
-        warnings.warn('GameObject: ' + self.name + ' do not have component: ' + component_name.__name__)
+        # warnings.warn('GameObject: ' + self.name + ' do not have component: ' + component_name.__name__)
         return None
 
     def add_component(self, component_name, *args, **kwargs):

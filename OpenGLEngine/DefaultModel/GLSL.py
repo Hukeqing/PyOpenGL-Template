@@ -1,4 +1,5 @@
 import os
+from OpenGLEngine.Built_inClass.math_f import *
 
 
 class vs_maker:
@@ -42,24 +43,38 @@ class vs_maker:
 
 
 class GLSL_maker:
-    fs_path = os.path.dirname(__file__)
-    try:
-        with open(os.path.join(fs_path, 'no_light_fs.fs'), 'r') as f:
-            no_light_fs = f.read()
-    except FileNotFoundError:
-        raise FileNotFoundError("fs Shader file: light_fs.fs open error!")
-    try:
-        with open(os.path.join(fs_path, 'light_fs.fs'), 'r') as f:
-            light_fs = f.read()
-    except FileNotFoundError:
-        raise FileNotFoundError("fs Shader file: light_fs.fs open error!")
+    no_light_fs: str = None
+    light_fs: str = None
+    set_max_texture_number = 14
+    set_max_dir_light_number = 2
+    set_max_point_light_number = 10
+    set_max_spot_lights = 5
 
     @staticmethod
-    def get_fs(use_light: bool = True):
+    def init_data():
+        fs_path = os.path.dirname(__file__)
+        try:
+            with open(os.path.join(fs_path, 'no_light_fs.fs'), 'r') as f:
+                GLSL_maker.no_light_fs = f.read()
+        except FileNotFoundError:
+            raise FileNotFoundError("fs Shader file: light_fs.fs open error!")
+        try:
+            with open(os.path.join(fs_path, 'light_fs.fs'), 'r') as f:
+                GLSL_maker.light_fs = f.read().replace('___set_max_dir_light_number', str(GLSL_maker.set_max_dir_light_number)).replace(
+                    '___set_max_point_light_number', str(GLSL_maker.set_max_point_light_number)).replace('___set_max_spot_lights',
+                                                                                                         str(GLSL_maker.set_max_spot_lights))
+        except FileNotFoundError:
+            raise FileNotFoundError("fs Shader file: light_fs.fs open error!")
+
+    @staticmethod
+    def get_fs(use_light: bool = True, set_texture_number: int = 14):
+        set_texture_number = clamp(set_texture_number, 0, GLSL_maker.set_max_texture_number)
+        if GLSL_maker.light_fs is None:
+            GLSL_maker.init_data()
         if use_light:
-            return GLSL_maker.light_fs
+            return GLSL_maker.light_fs.replace('___set_texture_number', str(set_texture_number))
         else:
-            return GLSL_maker.no_light_fs
+            return GLSL_maker.no_light_fs.replace('___set_texture_number', str(set_texture_number))
 
     @staticmethod
     def get_vs(vertex_format: str = 'V', three_dimensional=True):
