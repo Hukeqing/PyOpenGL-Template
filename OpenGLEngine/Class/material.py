@@ -1,7 +1,9 @@
-from OpenGLEngine.Built_inClass import *
+from typing import Optional, List, Tuple
+
 from OpenGL.GL import *
 from PIL import Image
-from typing import Optional, List, Tuple, Union
+
+from OpenGLEngine.Built_inClass import *
 
 
 class Texture:
@@ -33,14 +35,24 @@ class Texture:
 
 class Material:
 
-    def __init__(self, color: Color, shininess: float, textures: Optional[List[Tuple[str, float]]] = None, diffuse: Optional[str] = None,
+    def __init__(self, color: Color = None, shininess: float = None, textures: Optional[List[Tuple[str, float]]] = None,
+                 diffuse: Optional[str] = None,
                  specular: Optional[str] = None):
-        self.color = color
-        self.shininess = shininess
-        self.textures = textures
-        if self.textures is not None:
-            # TODO... a /= (a + b); b /= (a + b)
-            self.textures = [(Texture(texture_path=item[0]), item[1]) for item in textures]
+        self.color = DefaultColor.white if color is None else color
+        self.shininess = 32 if shininess is None else shininess
+        if textures is not None:
+            self.textures = [[Texture(texture_path=item[0]), 0] for item in textures if item[1] > 0]
+            textures_value = [item[1] for item in textures if item[1] > 0]
+            textures_sum = sum(textures_value)
+            textures_value = list(map(lambda x: x / textures_sum, textures_value))
+            self.textures[-1][1] = textures_value[-1]
+            self.textures[0][1] = textures_value[0]
+            index = len(textures_value) - 2
+            while index > 0:
+                self.textures[index][1] = (textures_value[index] * self.textures[index + 1][1]) / (
+                        (1 - self.textures[index + 1][1]) * textures_value[index + 1])
+        else:
+            self.textures = None
         self.diffuse = diffuse
         if self.diffuse is not None:
             self.diffuse = Texture(texture_path=self.diffuse)
@@ -54,12 +66,13 @@ class Material:
         glUniform1f(glGetUniformLocation(shader_program, 'material.shininess'), self.shininess)
 
         # texture
-        glUniform1i(glGetUniformLocation(shader_program, 'material.texture_number'), len(self.textures))
-        for index, item in enumerate(self.textures):
-            glUniform1f(glGetUniformLocation(shader_program, 'material.textures[' + str(index) + '].mix_value'), item[1])
-            glUniform1i(glGetUniformLocation(shader_program, 'material.textures[' + str(index) + '].texture_index'), index + 2)
-            glActiveTexture(GL_TEXTURE0 + index + 2)
-            glBindTexture(GL_TEXTURE_2D, item[0].texture)
+        if self.textures is not None:
+            glUniform1i(glGetUniformLocation(shader_program, 'material.texture_number'), len(self.textures))
+            for index, item in enumerate(self.textures):
+                glUniform1f(glGetUniformLocation(shader_program, 'material.textures[' + str(index) + '].mix_value'), item[1])
+                glUniform1i(glGetUniformLocation(shader_program, 'material.textures[' + str(index) + '].texture_index'), index + 2)
+                glActiveTexture(GL_TEXTURE0 + index + 2)
+                glBindTexture(GL_TEXTURE_2D, item[0].texture)
         # diffuse and specular
         if self.diffuse is not None or self.specular is not None:
             glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), 1)
@@ -86,4 +99,4 @@ class Material:
             glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), 0)
 
 
-DefaultMaterial = Material(color=DefaultColor.white, shininess=5)
+DefaultMaterial = Material(color=DefaultColor.white, shininess=32)

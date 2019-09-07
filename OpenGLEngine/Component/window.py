@@ -88,7 +88,7 @@ class Window:
     def set_window_camera(self, camera: GameObject):
         self.camera = camera
 
-    def set_light(self, light: GameObject):
+    def add_light(self, light: GameObject):
         if light.get_component(DirectionLight) is not None:
             self.direction_light.append(light)
         elif light.get_component(PointLight) is not None:

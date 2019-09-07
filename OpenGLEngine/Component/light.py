@@ -6,13 +6,15 @@ from OpenGLEngine.Built_inClass.color import Color, DefaultColor
 
 
 class Light:
-    def __init__(self, ambient: float = 0.1, diffuse: float = 0.5, specular: float = 0.5, color: Optional[Color] = None):
-        self.ambient = ambient
-        self.diffuse = diffuse
-        self.specular = specular
-        self.color = color
-        if self.color is None:
-            self.color = DefaultColor.white
+    def __init__(self,
+                 ambient: Optional[float] = None,
+                 diffuse: Optional[float] = None,
+                 specular: Optional[float] = None,
+                 color: Optional[Color] = None):
+        self.ambient: float = 0.1 if ambient is None else ambient
+        self.diffuse = 0.5 if diffuse is None else diffuse
+        self.specular = 0.5 if specular is None else specular
+        self.color = DefaultColor.white if color is None else color
 
     def renderer(self, shader_program, variable_name: str):
         glUniform1f(glGetUniformLocation(shader_program, variable_name + '.ambient'), self.ambient)

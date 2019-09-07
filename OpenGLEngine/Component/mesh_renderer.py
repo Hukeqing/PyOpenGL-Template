@@ -9,7 +9,12 @@ class MeshRenderer(ComponentManager):
     Texture renderer * base color
     """
 
-    def __init__(self, game_object, vertex_shader, fragment_shader, material: Material = DefaultMaterial, check=True):
+    def __init__(self,
+                 game_object,
+                 vertex_shader: str,
+                 fragment_shader: str,
+                 material: Material = None,
+                 check: bool = True):
         super(MeshRenderer, self).__init__(game_object)
         self.vertex_shader = vertex_shader
         self.fragment_shader = fragment_shader
@@ -17,7 +22,7 @@ class MeshRenderer(ComponentManager):
         self.check_error = check
         self.init_data()
 
-        self.material = material
+        self.material = DefaultMaterial if material is None else material
 
     def init_data(self):
         # vertex shader

@@ -26,20 +26,19 @@ class PointLight(ComponentManager, Light):
 
     def __init__(self,
                  game_object: GameObject,
-                 light_range: float = 50,
-                 ambient: float = 0.1,
-                 diffuse: float = 0.5,
-                 specular: float = 0.5,
+                 light_range: Optional[float] = None,
+                 ambient: Optional[float] = None,
+                 diffuse: Optional[float] = None,
+                 specular: Optional[float] = None,
                  color: Optional[Color] = None):
         super(PointLight, self).__init__(game_object)
         super(ComponentManager, self).__init__(ambient=ambient, diffuse=diffuse, specular=specular, color=color)
         self.position: Vector3 = game_object.transform.position
-        self.range = clamp(light_range, 7, 3250)
+        self.range = 50 if light_range is None else clamp(light_range, 7, 3250)
         for dist, value in PointLight.ogre3D.items():
             if dist >= self.range:
                 self.constant, self.linear, self.quadratic = value
                 break
-        self.light: Light = Light(ambient=ambient, diffuse=diffuse, specular=specular, color=color)
 
     def renderer(self, shader_program, variable_name: str):
         glUniform3f(glGetUniformLocation(shader_program, variable_name + '.position'), *self.position)

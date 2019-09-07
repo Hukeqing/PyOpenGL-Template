@@ -3,7 +3,11 @@ from OpenGLEngine.Built_inClass import *
 
 
 class Transform(ComponentManager):
-    def __init__(self, game_object, position=None, rotation=None, scale=None):
+    def __init__(self,
+                 game_object,
+                 position=None,
+                 rotation=None,
+                 scale=None):
         super(Transform, self).__init__(game_object)
         self.position = position
         self.rotation = rotation

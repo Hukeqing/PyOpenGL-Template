@@ -73,7 +73,7 @@ print("shader compile error: ", message) if message else print('shader compile s
 
 # 片段着色器
 fragmentShader = glCreateShader(GL_FRAGMENT_SHADER)
-# fragmentShaderSource = open('GLSL_Template/vc/v3c3/v3c3.fs_maker', 'r').read()
+# fragmentShaderSource = open('GLSL_Template/vc/v3c3/v3c3.GLSL_maker', 'r').read()
 fragmentShaderSource = '''#version 330 core
 out vec4 FragColor;  
 in vec3 ourColor;

@@ -33,7 +33,12 @@ class MeshFilter(ComponentManager):
             if not isinstance(pattern, str):
                 raise ValueError('Pattern Error: "' + pattern + '" is not a str')
 
-    def __init__(self, game_object, vertices, vertex_format='V3', indices=None, draw_type=GL_TRIANGLES):
+    def __init__(self,
+                 game_object,
+                 vertices,
+                 vertex_format='V3',
+                 indices=None,
+                 draw_type=GL_TRIANGLES):
         super(MeshFilter, self).__init__(game_object)
         self.vertices = np.array(vertices, dtype=np.float32)
         self.vertex_format = MeshFilter.vertices_pattern(vertex_format)
