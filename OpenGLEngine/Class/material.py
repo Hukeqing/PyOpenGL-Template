@@ -51,6 +51,7 @@ class Material:
             while index > 0:
                 self.textures[index][1] = (textures_value[index] * self.textures[index + 1][1]) / (
                         (1 - self.textures[index + 1][1]) * textures_value[index + 1])
+                index -= 1
         else:
             self.textures = None
         self.diffuse = diffuse
