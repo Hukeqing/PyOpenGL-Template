@@ -59,7 +59,7 @@ PyOpenGL-Template/
 |    |    |----color.py
 |    |    |----keycode.py
 |    |    |----math_f.py
-|    |    |----vector3.py
+|    |    |----vector_matrix.py
 |    |----Class/
 |    |    |----__init__.py
 |    |    |----material.py
@@ -67,17 +67,27 @@ PyOpenGL-Template/
 |    |    |----__init__.py
 |    |    |----camera.py
 |    |    |----component_manager.py
+|    |    |----direction_light.py
 |    |    |----game_object.py
+|    |    |----light.py
 |    |    |----mesh_filter.py
 |    |    |----mesh_renderer.py
+|    |    |----point_light.py
+|    |    |----spot_light.py
 |    |    |----transform.py
 |    |    |----window.py
 |    |----DefaultModel/
 |    |    |----__init__.py
 |    |    |----create.py
 |    |    |----GLSL.py
+|    |    |----light_fs.fs
+|    |    |----no_light_fs.fs
 |    |----Demo/
 |    |    |----__init__.py
+|    |    |----demo0.py
+|    |    |----demo1.py
+|    |    |----demo2.py
+|    |    |----souce/
 |    |    |----SourceCode.py
 |    |----Test/
 |    |    |----__init__.py
