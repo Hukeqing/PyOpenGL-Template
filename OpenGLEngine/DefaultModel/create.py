@@ -1,5 +1,5 @@
 from functools import reduce
-from typing import Optional
+from typing import Optional, Union, List, Tuple
 
 import numpy as np
 import pywavefront
@@ -8,134 +8,135 @@ from OpenGL.GL import *
 import OpenGLEngine.DefaultModel.GLSL as GLSL
 from OpenGLEngine.Built_inClass import *
 from OpenGLEngine.Component import *
+from OpenGLEngine.Class import *
 
 
 class Create:
     cube_vertices_VT = [
-        -1.0, -1.0, -1.0, 0.0, 0.0,
-        1.0, -1.0, -1.0, 1.0, 0.0,
-        1.0, 1.0, -1.0, 1.0, 1.0,
-        1.0, 1.0, -1.0, 1.0, 1.0,
-        -1.0, 1.0, -1.0, 0.0, 1.0,
-        -1.0, -1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0,
+        0.5, -0.5, -0.5, 1.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0,
 
-        -1.0, -1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, 1.0, 1.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0,
-        -1.0, 1.0, 1.0, 0.0, 1.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 1.0,
+        -0.5, 0.5, 0.5, 0.0, 1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0,
 
-        -1.0, 1.0, 1.0, 1.0, 0.0,
-        -1.0, 1.0, -1.0, 1.0, 1.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0,
-        -1.0, 1.0, 1.0, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 1.0, 0.0,
+        -0.5, 0.5, -0.5, 1.0, 1.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0,
+        -0.5, 0.5, 0.5, 1.0, 0.0,
 
-        1.0, 1.0, 1.0, 1.0, 0.0,
-        1.0, 1.0, -1.0, 1.0, 1.0,
-        1.0, -1.0, -1.0, 0.0, 1.0,
-        1.0, -1.0, -1.0, 0.0, 1.0,
-        1.0, -1.0, 1.0, 0.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0,
+        0.5, -0.5, -0.5, 0.0, 1.0,
+        0.5, -0.5, -0.5, 0.0, 1.0,
+        0.5, -0.5, 0.5, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0,
 
-        -1.0, -1.0, -1.0, 0.0, 1.0,
-        1.0, -1.0, -1.0, 1.0, 1.0,
-        1.0, -1.0, 1.0, 1.0, 0.0,
-        1.0, -1.0, 1.0, 1.0, 0.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0,
+        0.5, -0.5, -0.5, 1.0, 1.0,
+        0.5, -0.5, 0.5, 1.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0,
 
-        -1.0, 1.0, -1.0, 0.0, 1.0,
-        1.0, 1.0, -1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0,
-        -1.0, 1.0, 1.0, 0.0, 0.0,
-        -1.0, 1.0, -1.0, 0.0, 1.0]
+        -0.5, 0.5, -0.5, 0.0, 1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 0.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0]
     cube_vertices_VN = [
-        -1.0, -1.0, -1.0, 0.0, 0.0, -1.0,
-        1.0, -1.0, -1.0, 0.0, 0.0, -1.0,
-        1.0, 1.0, -1.0, 0.0, 0.0, -1.0,
-        1.0, 1.0, -1.0, 0.0, 0.0, -1.0,
-        -1.0, 1.0, -1.0, 0.0, 0.0, -1.0,
-        -1.0, -1.0, -1.0, 0.0, 0.0, -1.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+        0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
+        -0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
 
-        -1.0, -1.0, 1.0, 0.0, 0.0, 1.0,
-        1.0, -1.0, 1.0, 0.0, 0.0, 1.0,
-        1.0, 1.0, 1.0, 0.0, 0.0, 1.0,
-        1.0, 1.0, 1.0, 0.0, 0.0, 1.0,
-        -1.0, 1.0, 1.0, 0.0, 0.0, 1.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0, 1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
+        0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
+        0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
+        0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
 
-        -1.0, 1.0, 1.0, -1.0, 0.0, 0.0,
-        -1.0, 1.0, -1.0, -1.0, 0.0, 0.0,
-        -1.0, -1.0, -1.0, -1.0, 0.0, 0.0,
-        -1.0, -1.0, -1.0, -1.0, 0.0, 0.0,
-        -1.0, -1.0, 1.0, -1.0, 0.0, 0.0,
-        -1.0, 1.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, 0.5, 0.5, -1.0, 0.0, 0.0,
+        -0.5, 0.5, -0.5, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, -1.0, 0.0, 0.0,
+        -0.5, -0.5, 0.5, -1.0, 0.0, 0.0,
+        -0.5, 0.5, 0.5, -1.0, 0.0, 0.0,
 
-        1.0, 1.0, 1.0, 1.0, 0.0, 0.0,
-        1.0, 1.0, -1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, -1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, -1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, 1.0, 1.0, 0.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
 
-        -1.0, -1.0, -1.0, 0.0, -1.0, 0.0,
-        1.0, -1.0, -1.0, 0.0, -1.0, 0.0,
-        1.0, -1.0, 1.0, 0.0, -1.0, 0.0,
-        1.0, -1.0, 1.0, 0.0, -1.0, 0.0,
-        -1.0, -1.0, 1.0, 0.0, -1.0, 0.0,
-        -1.0, -1.0, -1.0, 0.0, -1.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
+        0.5, -0.5, 0.5, 0.0, -1.0, 0.0,
+        0.5, -0.5, 0.5, 0.0, -1.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, -1.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
 
-        -1.0, 1.0, -1.0, 0.0, 1.0, 0.0,
-        1.0, 1.0, -1.0, 0.0, 1.0, 0.0,
-        1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
-        1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
-        -1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
-        -1.0, 1.0, -1.0, 0.0, 1.0, 0.0]
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
+        0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0]
     cube_vertices_VTN = [
-        -1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0,
-        1.0, -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, -1.0,
-        1.0, 1.0, -1.0, 1.0, 1.0, 0.0, 0.0, -1.0,
-        1.0, 1.0, -1.0, 1.0, 1.0, 0.0, 0.0, -1.0,
-        -1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 0.0, -1.0,
-        -1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-        1.0, -1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0,
-        -1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-        -1.0, 1.0, 1.0, 1.0, 0.0, -1.0, 0.0, 0.0,
-        -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 0.0, 0.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 0.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 0.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-        -1.0, 1.0, 1.0, 1.0, 0.0, -1.0, 0.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
-        1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-        1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0, 0.0, -1.0, 0.0,
-        1.0, -1.0, -1.0, 1.0, 1.0, 0.0, -1.0, 0.0,
-        1.0, -1.0, 1.0, 1.0, 0.0, 0.0, -1.0, 0.0,
-        1.0, -1.0, 1.0, 1.0, 0.0, 0.0, -1.0, 0.0,
-        -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0,
-        -1.0, -1.0, -1.0, 0.0, 1.0, 0.0, -1.0, 0.0,
-        -1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
-        1.0, 1.0, -1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-        1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-        -1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-        -1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0]
-    quad_vertices_VT = [1.0, 1.0, 0, 1.0, 1.0,
-                        1.0, -1.0, 0, 1.0, 0.0,
-                        -1.0, -1.0, 0, 0.0, 0.0,
-                        -1.0, 1.0, 0, 0.0, 1.0]
+        -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0,
+        0.5, -0.5, -0.5, 1.0, 0.0, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, -1.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0, 0.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 1.0, 0.0, 0.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 1.0, 0.0, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 1.0, 0.0, -1.0, 0.0, 0.0,
+        -0.5, 0.5, -0.5, 1.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, -1.0, 0.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, -1.0, 0.0, 0.0,
+        -0.5, 0.5, 0.5, 1.0, 0.0, -1.0, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, -1.0, 0.0,
+        0.5, -0.5, -0.5, 1.0, 1.0, 0.0, -1.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0, -1.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0, -1.0, 0.0,
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -1.0, 0.0,
+        -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, -1.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0]
+    quad_vertices_VT = [0.5, 0.5, 0, 1.0, 1.0,
+                        0.5, -0.5, 0, 1.0, 0.0,
+                        -0.5, -0.5, 0, 0.0, 0.0,
+                        -0.5, 0.5, 0, 0.0, 1.0]
     quad_indices_VT = [0, 1, 3,
                        1, 2, 3]
 
@@ -169,11 +170,11 @@ class Create:
         return new_orthogonal_camera
 
     @staticmethod
-    def cube(object_name='new Cube',
-             position=None,
-             rotation=None,
-             scale=None,
-             material=None) -> GameObject:
+    def cube(object_name: str = 'new Cube',
+             position: Optional[Vector3] = None,
+             rotation: Optional[Vector3] = None,
+             scale: Optional[Vector3] = None,
+             material: Optional[Material] = None) -> GameObject:
         new_cube = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
         vs = GLSL.GLSL_maker.get_vs(vertex_format='VTN', three_dimensional=True)
         fs = GLSL.GLSL_maker.get_fs(True)
@@ -182,11 +183,11 @@ class Create:
         return new_cube
 
     @staticmethod
-    def ignore_light_cube(object_name='new ignore light Cube',
-                          position=None,
-                          rotation=None,
-                          scale=None,
-                          material=None):
+    def ignore_light_cube(object_name: str = 'new ignore light Cube',
+                          position: Optional[Vector3] = None,
+                          rotation: Optional[Vector3] = None,
+                          scale: Optional[Vector3] = None,
+                          material: Optional[Material] = None):
         new_ignore_light_cube = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
         vs = GLSL.GLSL_maker.get_vs('VT', True)
         fs = GLSL.GLSL_maker.get_fs(False)
@@ -195,38 +196,38 @@ class Create:
         return new_ignore_light_cube
 
     @staticmethod
-    def direction_light(object_name='new Direction Light',
-                        rotation=None,
-                        ambient=None,
-                        diffuse=None,
-                        specular=None,
-                        color=None):
+    def direction_light(object_name: str = 'new Direction Light',
+                        rotation: Optional[Vector3] = None,
+                        ambient: Optional[Vector3] = None,
+                        diffuse: Optional[Vector3] = None,
+                        specular: Optional[Vector3] = None,
+                        color: Optional[Color] = None):
         new_direction_light = GameObject(name=object_name, position=None, rotation=rotation, scale=None)
         new_direction_light.add_component(DirectionLight, ambient=ambient, diffuse=diffuse, specular=specular, color=color)
         return new_direction_light
 
     @staticmethod
     def point_light(object_name='new Point Light',
-                    position=None,
-                    light_range=None,
-                    ambient=None,
-                    diffuse=None,
-                    specular=None,
-                    color=None):
+                    position: Optional[Vector3] = None,
+                    light_range: Optional[float] = None,
+                    ambient: Optional[float] = None,
+                    diffuse: Optional[float] = None,
+                    specular: Optional[float] = None,
+                    color: Optional[Color] = None):
         new_point_light = GameObject(name=object_name, position=position, rotation=None, scale=None)
         new_point_light.add_component(PointLight, light_range=light_range, ambient=ambient, diffuse=diffuse, specular=specular, color=color)
         return new_point_light
 
     @staticmethod
     def spot_light(object_name='new Spot Light',
-                   cut_off=None,
-                   outer_cut_off=None,
-                   position=None,
-                   light_range=None,
-                   ambient=None,
-                   diffuse=None,
-                   specular=None,
-                   color=None):
+                   cut_off: Optional[float] = None,
+                   outer_cut_off: Optional[float] = None,
+                   position: Optional[Vector3] = None,
+                   light_range: Optional[float] = None,
+                   ambient: Optional[float] = None,
+                   diffuse: Optional[float] = None,
+                   specular: Optional[float] = None,
+                   color: Optional[Color] = None):
         new_spot_light = GameObject(name=object_name, position=position, rotation=None, scale=None)
         new_spot_light.add_component(SpotLight, cut_off=cut_off, outer_cut_off=outer_cut_off, light_range=light_range, ambient=ambient,
                                      diffuse=diffuse, specular=specular, color=color)
@@ -234,11 +235,11 @@ class Create:
 
     @staticmethod
     def obj_object(obj_path: str,
-                   object_name='new obj Object',
-                   position=None,
-                   rotation=None,
-                   scale=None,
-                   material=DefaultColor.white):
+                   object_name: str = 'new obj Object',
+                   position: Optional[Vector3] = None,
+                   rotation: Optional[Vector3] = None,
+                   scale: Optional[Vector3] = None,
+                   material: Optional[Material] = None):
         new_obj_Object = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
         vertex_format, vertices = Create.load_obj(obj_path)
         vs = GLSL.GLSL_maker.get_vs(vertex_format=vertex_format, three_dimensional=True)

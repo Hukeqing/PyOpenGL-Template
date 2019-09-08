@@ -53,6 +53,7 @@ class Window:
         self.light: Tuple[List[GameObject], List[GameObject], List[GameObject]] = (self.direction_light, self.point_light, self.spot_light)
         # update function
         self.update: List[Callable[[], bool]] = list()
+        self.start: List[Callable[[], bool]] = list()
         # game object list
         self.game_object_list: List[GameObject] = list()
         # mouse properties
@@ -98,31 +99,39 @@ class Window:
         else:
             raise ValueError('This is not a Light')
 
+    def add_game_object(self, game_object: GameObject):
+        self.game_object_list.append(game_object)
+        # return
+
     def add_update_function(self, update: Callable[[], bool]):
         self.update.append(update)
 
+    def add_start_function(self, start: Callable[[], bool]):
+        self.update.append(start)
+
     def draw(self):
+        # set fps
         self.delta_time = glfw.get_time() - self.last_time
         self.last_time = glfw.get_time()
         if self.fps_clock != 0 and self.delta_time < self.fps_clock_deltatime:
             time.sleep(self.fps_clock_deltatime - self.delta_time)
             self.delta_time = self.fps_clock_deltatime
-
+        # update
         for function_name in self.update:
             if not function_name():
-                raise RuntimeError('Function ' + function_name.__name__ + ' runtime error')
+                raise RuntimeError('Update Function: ' + function_name.__name__ + ' runtime error')
         view = self.camera.transform.get_view_matrix()
         projection = self.camera.get_component(Camera).projection
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.render_function(view, projection)
-
+        # fps count
         self.fps_count_number += 1
         self.fps_count_time += self.delta_time
         if self.fps_count_time >= 5:
             print('fps:', self.fps_count_number / 5)
             self.fps_count_time = 0
             self.fps_count_number = 0
-
-    def window_render(self, view, projection):
+        # basic move
         if self.basic_move is not None:
             if self.input_get_key(glfw.KEY_W):
                 self.camera.transform.translate(self.camera.transform.forward * self.basic_move[0] * self.delta_time)
@@ -132,7 +141,8 @@ class Window:
                 self.camera.transform.rotate(-self.camera.transform.up * self.basic_move[1] * self.delta_time)
             if self.input_get_key(glfw.KEY_D):
                 self.camera.transform.rotate(self.camera.transform.up * self.basic_move[1] * self.delta_time)
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+    def window_render(self, view, projection):
         for item in self.game_object_list:
             item.draw(view, projection, self.light, self.camera.transform.position)
 
@@ -157,6 +167,9 @@ class Window:
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)  # 使透明生效
         self.last_time = glfw.get_time()
         self.mouse_scroll_value = 0
+        for function_name in self.start:
+            if not function_name():
+                raise RuntimeError('Start Function: ' + function_name.__name__ + ' runtime error')
         while not glfw.window_should_close(self.window):
             self.draw()
             glfw.swap_buffers(self.window)

@@ -13,6 +13,7 @@ class GameObject:
         self.name = name
         self.transform = Transform(self, position=position, rotation=rotation, scale=scale)
         self.component_list = [self.transform]
+        self.renderer = lambda model, view, projection: (model, view, projection)
 
     def get_component(self, component_name):
         for component in self.component_list:
@@ -28,21 +29,18 @@ class GameObject:
     def draw(self, view, projection, light, view_position):
         this_mesh_renderer: Optional[MeshRenderer] = self.get_component(MeshRenderer)
         this_mesh_filter: Optional[MeshFilter] = self.get_component(MeshFilter)
-        # TODO...
         if this_mesh_renderer is not None:
             this_mesh_renderer.use()
-
             m = glm.translate(glm.mat4(1), self.transform.position)
             m = glm.rotate(m, glm.radians(self.transform.rotation.x), glm.vec3(1, 0, 0))
             m = glm.rotate(m, glm.radians(self.transform.rotation.y), glm.vec3(0, 1, 0))
             m = glm.rotate(m, glm.radians(self.transform.rotation.z), glm.vec3(0, 0, 1))
             m = glm.scale(m, self.transform.scale)
-            this_mesh_renderer.set_matrix('model', glm.value_ptr(m))
+            model, view, projection = self.renderer(model=m, view=view, projection=projection)
+            this_mesh_renderer.set_matrix('model', glm.value_ptr(model))
             this_mesh_renderer.set_matrix('view', glm.value_ptr(view))
             this_mesh_renderer.set_matrix('projection', glm.value_ptr(projection))
-            this_mesh_renderer.un_use()
-
-        if this_mesh_renderer is not None:
             this_mesh_renderer.draw(light_tuple=light, view_position=view_position)
+            # this_mesh_renderer.un_use()
         if this_mesh_filter is not None:
             this_mesh_filter.draw()

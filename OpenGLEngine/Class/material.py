@@ -1,4 +1,4 @@
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Union
 
 from OpenGL.GL import *
 from PIL import Image
@@ -6,18 +6,39 @@ from PIL import Image
 from OpenGLEngine.Built_inClass import *
 
 
+class TextureWrapping:
+    repeat = GL_REPEAT
+    mirrored_repeat = GL_MIRRORED_REPEAT
+    clamp_to_edge = GL_CLAMP_TO_EDGE
+    clamp_to_border = GL_CLAMP_TO_BORDER
+
+
 class Texture:
-    def __init__(self, texture_path: str):
+    def __init__(self, texture_path: str,
+                 texture_wrapping_filtering):
         self.texture_path = texture_path
+        self.texture_wrapping_filtering = list(texture_wrapping_filtering)
+        del self.texture_wrapping_filtering[0]
+        if len(self.texture_wrapping_filtering) == 0:
+            self.texture_wrapping_filtering.append((GL_REPEAT, GL_REPEAT))
+            self.texture_wrapping_filtering.append((GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR))
+        elif len(self.texture_wrapping_filtering) == 1:
+            self.texture_wrapping_filtering.append((GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR))
+
         self.texture = self.open_texture()
 
     def open_texture(self):
         texture = glGenTextures(1)
         glBindTexture(GL_TEXTURE_2D, texture)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        if self.texture_wrapping_filtering[0][0] == GL_CLAMP_TO_BORDER:
+            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, self.texture_wrapping_filtering[0][1])
+        else:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, self.texture_wrapping_filtering[0][0])
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, self.texture_wrapping_filtering[0][1])
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, self.texture_wrapping_filtering[1][0])
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, self.texture_wrapping_filtering[1][1])
+
         try:
             img = Image.open(self.texture_path)
         except FileNotFoundError:
@@ -34,14 +55,17 @@ class Texture:
 
 
 class Material:
-
-    def __init__(self, color: Color = None, shininess: float = None, textures: Optional[List[Tuple[str, float]]] = None,
-                 diffuse: Optional[str] = None,
-                 specular: Optional[str] = None):
+    def __init__(self, color: Color = None,
+                 shininess: float = None,
+                 textures: Optional[Union[str, tuple, list]] = None,
+                 diffuse: Optional[Union[str, tuple, list]] = None,
+                 specular: Optional[Union[str, tuple, list]] = None):
         self.color = DefaultColor.white if color is None else color
         self.shininess = 32 if shininess is None else shininess
         if textures is not None:
-            self.textures = [[Texture(texture_path=item[0]), 0] for item in textures if item[1] > 0]
+            if isinstance(textures, str):
+                textures = [(textures, 1)]
+            self.textures: list = [[Texture(item[0], item[1:]), 0] for item in textures if item[1] > 0]
             textures_value = [item[1] for item in textures if item[1] > 0]
             textures_sum = sum(textures_value)
             textures_value = list(map(lambda x: x / textures_sum, textures_value))
@@ -54,12 +78,12 @@ class Material:
                 index -= 1
         else:
             self.textures = None
-        self.diffuse = diffuse
+        self.diffuse = (diffuse, 0) if isinstance(diffuse, str) else diffuse
         if self.diffuse is not None:
-            self.diffuse = Texture(texture_path=self.diffuse)
-        self.specular = specular
+            self.diffuse = Texture(self.diffuse[0], self.diffuse[1:])
+        self.specular = (specular, 0) if isinstance(specular, str) else specular
         if self.specular is not None:
-            self.specular = Texture(texture_path=self.specular)
+            self.specular = Texture(self.specular[0], self.specular[1:])
 
     def renderer(self, shader_program):
         # material

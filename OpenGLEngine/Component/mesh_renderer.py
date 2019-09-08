@@ -50,7 +50,7 @@ class MeshRenderer(ComponentManager):
         glUseProgram(self.shader_program)
 
     def draw(self, light_tuple, view_position):
-        self.use()
+        # self.use()
         glUniform3f(glGetUniformLocation(self.shader_program, 'viewPos'), *view_position)
 
         # light
