@@ -27,4 +27,4 @@ class DefaultColor:
     black = Color(0, 0, 0, 1)
     red = Color(1, 0, 0, 1)
     green = Color(0, 1, 0, 1)
-    blue = Color(0, 0, 1, 0)
+    blue = Color(0, 0, 1, 1)

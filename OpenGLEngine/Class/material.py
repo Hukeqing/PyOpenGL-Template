@@ -15,8 +15,9 @@ class TextureWrapping:
 
 class Texture:
     def __init__(self, texture_path: str,
-                 texture_wrapping_filtering):
+                 texture_wrapping_filtering=None):
         self.texture_path = texture_path
+        self.texture_wrapping_filtering = [1] if texture_wrapping_filtering is None else texture_wrapping_filtering
         self.texture_wrapping_filtering = list(texture_wrapping_filtering)
         del self.texture_wrapping_filtering[0]
         if len(self.texture_wrapping_filtering) == 0:

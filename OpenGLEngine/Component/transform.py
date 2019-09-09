@@ -1,26 +1,18 @@
 from OpenGLEngine.Component.component_manager import ComponentManager
 from OpenGLEngine.Built_inClass import *
+from typing import Optional
 
 
 class Transform(ComponentManager):
     def __init__(self,
                  game_object,
-                 position=None,
-                 rotation=None,
-                 scale=None):
+                 position: Optional[Vector3] = None,
+                 rotation: Optional[Vector3] = None,
+                 scale: Optional[Vector3] = None):
         super(Transform, self).__init__(game_object)
-        self.position = position
-        self.rotation = rotation
-        self.scale = scale
-
-        if self.position is None:
-            self.position = Vector3(0, 0, 0)
-
-        if self.rotation is None:
-            self.rotation = Vector3(0, 0, 0)
-
-        if self.scale is None:
-            self.scale = Vector3(1, 1, 1)
+        self.position = Vector3(0, 0, 0) if position is None else position
+        self.rotation = Vector3(0, 0, 0) if rotation is None else rotation
+        self.scale = Vector3(0, 0, 0) if scale is None else scale
 
         self.forward = None
         self.left = None
