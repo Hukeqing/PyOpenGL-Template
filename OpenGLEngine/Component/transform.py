@@ -12,7 +12,7 @@ class Transform(ComponentManager):
         super(Transform, self).__init__(game_object)
         self.position = Vector3(0, 0, 0) if position is None else position
         self.rotation = Vector3(0, 0, 0) if rotation is None else rotation
-        self.scale = Vector3(0, 0, 0) if scale is None else scale
+        self.scale = Vector3(1, 1, 1) if scale is None else scale
 
         self.forward = None
         self.left = None
