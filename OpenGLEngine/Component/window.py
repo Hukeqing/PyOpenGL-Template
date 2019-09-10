@@ -101,7 +101,20 @@ class Window:
 
     def add_game_object(self, game_object: GameObject):
         self.game_object_list.append(game_object)
-        # return
+        return len(self.game_object_list) - 1
+
+    def del_game_object(self, index):
+        self.game_object_list[index] = None
+
+    def find_game_object_index(self, game_object_name: str):
+        for index, item in enumerate(self.game_object_list):
+            if item.name == game_object_name:
+                return index
+        return -1
+
+    def find_game_object(self, game_object_name: str):
+        game_object_index = self.find_game_object_index(game_object_name)
+        return None if game_object_index == -1 else self.game_object_list[game_object_index]
 
     def add_update_function(self, update: Callable[[], bool]):
         self.update.append(update)
@@ -144,7 +157,8 @@ class Window:
 
     def window_render(self, view, projection):
         for item in self.game_object_list:
-            item.draw(view, projection, self.light, self.camera.transform.position)
+            if item is not None:
+                item.draw(view, projection, self.light, self.camera.transform.position)
 
     def input_get_key(self, key_code):
         return glfw.get_key(self.window, key_code) == glfw.PRESS

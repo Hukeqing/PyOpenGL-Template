@@ -137,8 +137,12 @@ class Create:
                         0.5, -0.5, 0, 1.0, 0.0,
                         -0.5, -0.5, 0, 0.0, 0.0,
                         -0.5, 0.5, 0, 0.0, 1.0]
-    quad_indices_VT = [0, 1, 3,
-                       1, 2, 3]
+    quad_vertices_VTN = [0.5, 0.5, 0, 1.0, 1.0, 0, 0, 1,
+                         0.5, -0.5, 0, 1.0, 0.0, 0, 0, 1,
+                         -0.5, -0.5, 0, 0.0, 0.0, 0, 0, 1,
+                         -0.5, 0.5, 0, 0.0, 1.0, 0, 0, 1]
+    quad_indices = [0, 1, 3,
+                    1, 2, 3]
 
     @staticmethod
     def camera(window: Window,
@@ -181,6 +185,32 @@ class Create:
         new_cube.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
         new_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VTN, vertex_format='V3T2N3', draw_type=GL_TRIANGLES)
         return new_cube
+
+    @staticmethod
+    def quad(object_name: str = 'new quad',
+             position: Optional[Vector3] = None,
+             rotation: Optional[Vector3] = None,
+             scale: Optional[Vector3] = None,
+             material: Optional[Material] = None):
+        new_quad = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
+        vs = GLSL.GLSL_maker.get_vs(vertex_format='VTN', three_dimensional=True)
+        fs = GLSL.GLSL_maker.get_fs(True)
+        new_quad.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
+        new_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VTN, vertex_format='V3T2N3', indices=Create.quad_indices,
+                               draw_type=GL_TRIANGLES)
+
+    @staticmethod
+    def ignore_light_quad(object_name: str = 'new ignore light quad',
+                          position: Optional[Vector3] = None,
+                          rotation: Optional[Vector3] = None,
+                          scale: Optional[Vector3] = None,
+                          material: Optional[Material] = None):
+        new_ignore_light_quad = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
+        vs = GLSL.GLSL_maker.get_vs(vertex_format='VT', three_dimensional=True)
+        fs = GLSL.GLSL_maker.get_fs(False)
+        new_ignore_light_quad.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
+        new_ignore_light_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VT, vertex_format='V3T2', indices=Create.quad_indices,
+                                            draw_type=GL_TRIANGLES)
 
     @staticmethod
     def ignore_light_cube(object_name: str = 'new ignore light Cube',
