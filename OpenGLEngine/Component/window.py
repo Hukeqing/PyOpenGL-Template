@@ -106,13 +106,13 @@ class Window:
     def del_game_object(self, index):
         self.game_object_list[index] = None
 
-    def find_game_object_index(self, game_object_name: str):
+    def find_game_object_index(self, game_object_name: str) -> int:
         for index, item in enumerate(self.game_object_list):
             if item.name == game_object_name:
                 return index
         return -1
 
-    def find_game_object(self, game_object_name: str):
+    def find_game_object(self, game_object_name: str) -> GameObject:
         game_object_index = self.find_game_object_index(game_object_name)
         return None if game_object_index == -1 else self.game_object_list[game_object_index]
 

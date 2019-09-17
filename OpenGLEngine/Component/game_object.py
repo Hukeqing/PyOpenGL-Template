@@ -9,7 +9,11 @@ from OpenGLEngine.Component.transform import Transform
 
 
 class GameObject:
-    def __init__(self, name='new GameObject', position=None, rotation=None, scale=None):
+    def __init__(self,
+                 name='new GameObject',
+                 position=None,
+                 rotation=None,
+                 scale=None):
         self.name = name
         self.transform = Transform(self, position=position, rotation=rotation, scale=scale)
         self.component_list = [self.transform]
