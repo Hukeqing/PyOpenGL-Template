@@ -20,13 +20,9 @@ class vs_maker:
                 self.data += 'vec3 aNormal;\n'
 
         self.data += '\n'
+        self.data += 'out vec2 TexCoord;\nout vec3 FragPos;\nout vec3 Normal;\n\n'
         if self.three_dimensional:
             self.data += 'uniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\n'
-
-        if 'T' in self.vertex_format:
-            self.data += 'out vec2 TexCoord;\n\n'
-        if self.three_dimensional:
-            self.data += 'out vec3 FragPos;\nout vec3 Normal;\n\n'
 
         # main
         self.data += 'void main()\n{\n'
@@ -36,9 +32,12 @@ class vs_maker:
             self.data += '\tgl_Position = vec4(aPos, 1.0);\n'
         if 'T' in self.vertex_format:
             self.data += '\tTexCoord = aTexCoord;\n'
+        else:
+            self.data += '\tTexCoord = vec2(0);'
         if 'N' in self.vertex_format:
             self.data += '\tFragPos = vec3(model * vec4(aPos, 1.0));\n\tNormal = mat3(transpose(inverse(model))) * aNormal;\n'
-
+        else:
+            self.data += '\tFragPos = vec3(0);\n\tNormal = vec3(0);\n'
         self.data += '}\n'
 
 
