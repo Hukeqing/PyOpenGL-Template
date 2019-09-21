@@ -67,7 +67,7 @@ class Window:
         self.create_window()
         self.bind_io_process()
         # DIY render
-        self.render_function = self.window_render
+        self.render_function: Callable[[Matrix4x4, Matrix4x4], None] = self.window_render
 
     def create_window(self):
         if not glfw.init():
@@ -103,7 +103,7 @@ class Window:
         self.game_object_list.append(game_object)
         return len(self.game_object_list) - 1
 
-    def del_game_object(self, index):
+    def del_game_object(self, index: int):
         self.game_object_list[index] = None
 
     def find_game_object_index(self, game_object_name: str) -> int:
@@ -116,10 +116,10 @@ class Window:
         game_object_index = self.find_game_object_index(game_object_name)
         return None if game_object_index == -1 else self.game_object_list[game_object_index]
 
-    def add_update_function(self, update: Callable[[], bool]):
+    def add_update_function(self, update: Callable[[], None]):
         self.update.append(update)
 
-    def add_start_function(self, start: Callable[[], bool]):
+    def add_start_function(self, start: Callable[[], None]):
         self.update.append(start)
 
     def draw(self):
@@ -131,8 +131,7 @@ class Window:
             self.delta_time = self.fps_clock_deltatime
         # update
         for function_name in self.update:
-            if not function_name():
-                raise RuntimeError('Update Function: ' + function_name.__name__ + ' runtime error')
+            function_name()
         view = self.camera.transform.get_view_matrix()
         projection = self.camera.get_component(Camera).projection
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -155,7 +154,7 @@ class Window:
             if self.input_get_key(glfw.KEY_D):
                 self.camera.transform.rotate(self.camera.transform.up * self.basic_move[1] * self.delta_time)
 
-    def window_render(self, view, projection):
+    def window_render(self, view: Matrix4x4, projection: Matrix4x4):
         for item in self.game_object_list:
             if item is not None:
                 item.draw(view, projection, self.light, self.camera.transform.position)

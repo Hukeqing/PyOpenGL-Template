@@ -32,3 +32,4 @@ class Data:
 
 Vector3 = Data(mode='v3')
 Matrix4 = Data(mode='m4')
+Matrix4x4 = Data(mode='m4x4')

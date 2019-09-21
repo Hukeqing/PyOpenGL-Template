@@ -16,7 +16,7 @@ struct Material {
     float shininess;
     sampler2D diffuse;
     sampler2D specular;
-    int useSampler;
+    bool useSampler;
 
     int texture_number;
     Texture textures[14];

@@ -101,7 +101,7 @@ class Material:
                 glBindTexture(GL_TEXTURE_2D, item[0].texture)
         # diffuse and specular
         if self.diffuse is not None or self.specular is not None:
-            glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), 1)
+            glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), True)
 
             if self.diffuse is not None:
                 glUniform1i(glGetUniformLocation(shader_program, 'material.diffuse'), 0)
@@ -122,7 +122,7 @@ class Material:
                 glBindTexture(GL_TEXTURE_2D, self.diffuse.specular)
 
         else:
-            glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), 0)
+            glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), False)
 
 
-DefaultMaterial = Material(color=DefaultColor.white, shininess=32)
+DefaultMaterial = Material()

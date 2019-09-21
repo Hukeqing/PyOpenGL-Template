@@ -14,15 +14,16 @@ struct Texture {
 struct Material {
     vec4 color;
     float shininess;
+
     sampler2D diffuse;
     sampler2D specular;
-    int useSampler;
+    bool useSampler;
 
     int texture_number;
     Texture textures[___set_texture_number];
 };
 
-struct TestureMaterial {
+struct TextureMaterial {
 	vec3 diffuseVec3;
 	vec3 specularVec3;
 };
@@ -67,7 +68,7 @@ struct SpotLight {
 
 uniform Material material;
 uniform vec3 viewPos;
-TestureMaterial texture_material;
+TextureMaterial texture_material;
 
 uniform int dirLight_number;
 uniform DirLight dirLights[___set_max_dir_light_number];
@@ -89,7 +90,7 @@ void main() {
     // properties
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
-    if (material.useSampler > 0) {
+    if (material.useSampler) {
         texture_material.diffuseVec3 = vec3(texture(material.diffuse, TexCoord));
         texture_material.specularVec3 = vec3(texture(material.specular, TexCoord));
     } else {
@@ -102,8 +103,8 @@ void main() {
     // per lamp. In the main() function we take all the calculated colors and sum them up for
     // this fragment's final color.
     // ========================================================
+    vec3 result = vec3(0);
     // phase 1: directional lighting
-    vec3 result = vec3(0, 0, 0);
     for (int i = 0; i < dirLight_number; i++)
         result += CalcDirLight(dirLights[i], norm, viewDir) * dirLights[i].color;
     // phase 2: point lights
@@ -113,6 +114,20 @@ void main() {
     for (int i = 0; i < spotLight_number; i++)
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir) * spotLights[i].color;
 
+    if (material.color.w < 1)
+    {
+        vec3 back_result = vec3(0);
+        // phase 1: directional lighting
+        for (int i = 0; i < dirLight_number; i++)
+            back_result += CalcDirLight(dirLights[i], -norm, viewDir) * dirLights[i].color;
+        // phase 2: point lights
+        for (int i = 0; i < pointLight_number; i++)
+            back_result += CalcPointLight(pointLights[i], -norm, FragPos, viewDir) * pointLights[i].color;
+        // phase 3: spot light
+        for (int i = 0; i < spotLight_number; i++)
+            back_result += CalcSpotLight(spotLights[i], -norm, FragPos, viewDir) * spotLights[i].color;
+        result = (result + back_result * (1 - material.color.w)) / 2;
+    }
     // texture mix
     vec4 texture_result = vec4(1.0);
     if (material.texture_number > 0) {
