@@ -56,7 +56,8 @@ class Texture:
 
 
 class Material:
-    def __init__(self, color: Color = None,
+    def __init__(self,
+                 color: Color = None,
                  shininess: float = None,
                  textures: Optional[Union[str, tuple, list]] = None,
                  diffuse: Optional[Union[str, tuple, list]] = None,

@@ -5,5 +5,5 @@ from OpenGLEngine.DefaultModel import *
 
 __all__ = ['Color', 'DefaultColor', 'KeyCode', 'Vector3',
            'Material',
-           'Camera', 'OrthogonalCamera', 'ComponentManager', 'GameObject', 'MeshFilter', 'MeshRenderer', 'Transform', 'Window',
+           'Camera', 'OrthogonalCamera', 'ComponentManager', 'GameObject', 'MeshFilter', 'DepthMode', 'MeshRenderer', 'Transform', 'Window',
            'Create', 'GLSL']

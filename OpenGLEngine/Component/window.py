@@ -134,7 +134,8 @@ class Window:
             function_name()
         view = self.camera.transform.get_view_matrix()
         projection = self.camera.get_component(Camera).projection
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT)
         self.render_function(view, projection)
         # fps count
         self.fps_count_number += 1
