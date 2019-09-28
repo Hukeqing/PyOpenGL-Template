@@ -3,8 +3,8 @@ from typing import Optional
 import glm
 from OpenGL.GL import *
 
-from OpenGLEngine.Built_inClass.color import Color
-from OpenGLEngine.Built_inClass.vector_matrix import Vector3
+from OpenGLEngine.Class.color import Color
+from OpenGLEngine.Class.vector_matrix import Vector3
 from OpenGLEngine.Component.game_object import GameObject
 from OpenGLEngine.Component.point_light import PointLight
 

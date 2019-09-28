@@ -1,5 +1,6 @@
 from OpenGLEngine.Component.component_manager import ComponentManager
-from OpenGLEngine.Built_inClass import *
+from OpenGLEngine.Class import *
+from OpenGLEngine.Function import *
 from typing import Optional
 
 

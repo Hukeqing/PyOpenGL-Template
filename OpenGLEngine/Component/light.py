@@ -2,7 +2,7 @@ from typing import Optional
 
 from OpenGL.GL import *
 
-from OpenGLEngine.Built_inClass.color import Color, DefaultColor
+from OpenGLEngine.Class.color import Color, DefaultColor
 
 
 class Light:

@@ -2,9 +2,9 @@ from typing import Optional
 
 from OpenGL.GL import *
 
-from OpenGLEngine.Built_inClass.color import Color
-from OpenGLEngine.Built_inClass.vector_matrix import Vector3
-from OpenGLEngine.Built_inClass.math_f import *
+from OpenGLEngine.Class.color import Color
+from OpenGLEngine.Class.vector_matrix import Vector3
+from OpenGLEngine.Function.math_f import *
 from OpenGLEngine.Component.component_manager import ComponentManager
 from OpenGLEngine.Component.game_object import GameObject
 from OpenGLEngine.Component.light import Light

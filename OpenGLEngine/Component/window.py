@@ -4,7 +4,8 @@ from typing import Optional, Union, Callable, List, Tuple
 import glfw
 from OpenGL.GL import *
 
-from OpenGLEngine.Built_inClass import *
+from OpenGLEngine.Function import *
+from OpenGLEngine.Class import *
 from OpenGLEngine.Component import *
 from OpenGLEngine.Component.direction_light import DirectionLight
 from OpenGLEngine.Component.point_light import PointLight

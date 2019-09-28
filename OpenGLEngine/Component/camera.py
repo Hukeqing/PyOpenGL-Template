@@ -2,7 +2,8 @@ import glm
 from OpenGLEngine.Component.component_manager import ComponentManager
 from OpenGLEngine.Component.transform import Transform
 from OpenGLEngine.Component.game_object import GameObject
-from OpenGLEngine.Built_inClass import *
+from OpenGLEngine.Class import *
+from OpenGLEngine.Function import *
 from typing import Optional, Union, Callable, List, Tuple
 
 

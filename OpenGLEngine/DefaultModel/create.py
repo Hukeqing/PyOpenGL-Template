@@ -6,7 +6,7 @@ import pywavefront
 from OpenGL.GL import *
 
 import OpenGLEngine.DefaultModel.GLSL as GLSL
-from OpenGLEngine.Built_inClass import *
+from OpenGLEngine.Function import *
 from OpenGLEngine.Component import *
 from OpenGLEngine.Class import *
 

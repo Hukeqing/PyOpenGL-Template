@@ -3,7 +3,7 @@ from typing import Optional, List, Tuple, Union
 from OpenGL.GL import *
 from PIL import Image
 
-from OpenGLEngine.Built_inClass import *
+from OpenGLEngine.Class.color import *
 
 
 class TextureWrapping:

@@ -1,5 +1,5 @@
 import os
-from OpenGLEngine.Built_inClass.math_f import *
+from OpenGLEngine.Function.math_f import *
 
 
 class vs_maker:
