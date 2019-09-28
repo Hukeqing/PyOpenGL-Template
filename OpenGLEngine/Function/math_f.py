@@ -24,3 +24,8 @@ def cos(*args, **kwargs):
 
 def tan(*args, **kwargs):
     return np.tan(*args, **kwargs)
+
+
+def Lerp(begin, end, value):
+    value = clamp(value, 0, 1)
+    return begin + (end - begin) * value
