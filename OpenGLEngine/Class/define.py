@@ -1,3 +1,29 @@
+from OpenGL.GL import *
+
+
+class Compare:
+    default = GL_LESS
+    always = GL_ALWAYS
+    never = GL_NEVER
+    less_than = GL_LESS
+    Less_than_or_equal_to = GL_LEQUAL
+    greater_than = GL_GREATER
+    greater_than_or_equal_to = GL_GEQUAL
+    equal_to = GL_EQUAL
+    not_equal_to = GL_NOTEQUAL
+
+
+class StencilOperator:
+    not_change = GL_KEEP
+    set_zero = GL_ZERO
+    replace = GL_REPLACE
+    increase = GL_INCR
+    increase_and_set_zero = GL_INCR_WRAP
+    decrease = GL_DECR
+    decrease_and_set_zero = GL_DECR_WRAP
+    invert = GL_INVERT
+
+
 class KeyCode:
     KEY_UNKNOWN = -1
     KEY_SPACE = 32

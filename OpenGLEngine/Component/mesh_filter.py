@@ -1,18 +1,10 @@
-from OpenGL.GL import *
 from ctypes import c_float, c_void_p, sizeof
+from typing import Optional, Union, Callable, List, Tuple
 import numpy as np
+from OpenGL.GL import *
+
+from OpenGLEngine.Class.define import Compare, StencilOperator
 from OpenGLEngine.Component.component_manager import ComponentManager
-
-
-class DepthMode:
-    default = GL_LESS
-    front = GL_ALWAYS
-    back = GL_NEVER
-    equal = GL_EQUAL
-    default_equal = GL_LEQUAL
-    different = GL_NOTEQUAL
-    dis_default = GL_GREATER
-    dis_default_equal = GL_GEQUAL
 
 
 class MeshFilter(ComponentManager):
@@ -50,7 +42,10 @@ class MeshFilter(ComponentManager):
                  vertex_format='V3',
                  indices=None,
                  draw_type=GL_TRIANGLES,
-                 depth_mode=DepthMode.default):
+                 depth_mode: Compare = Compare.less_than,
+                 write_stencil_mask: Union[int, bool] = False,
+                 stencil_test: Optional[Union[Compare, int, Union[int, bool]]] = None,
+                 stencil_operator: Optional[Union[StencilOperator, StencilOperator, StencilOperator]] = None):
         super(MeshFilter, self).__init__(game_object)
         self.vertices = np.array(vertices, dtype=np.float32)
         self.vertex_format = MeshFilter.vertices_pattern(vertex_format)
@@ -60,6 +55,11 @@ class MeshFilter(ComponentManager):
             self.indices = None
         self.draw_type = draw_type
         self.depth_mode = depth_mode
+        self.write_stencil_mask = write_stencil_mask if isinstance(write_stencil_mask, int) else 0xFF if write_stencil_mask else 0x00
+        self.stencil_test = stencil_test if stencil_test is not None else (Compare.less_than, 0, 0x00)
+        self.stencil_operator = stencil_operator if stencil_operator is not None else (StencilOperator.not_change,
+                                                                                       StencilOperator.not_change,
+                                                                                       StencilOperator.not_change)
 
         self.vao = None
         self.ebo = None
@@ -83,6 +83,9 @@ class MeshFilter(ComponentManager):
 
     def draw(self):
         glDepthFunc(self.depth_mode)
+        glStencilMask(self.write_stencil_mask)
+        glStencilFunc(*self.stencil_test)
+
         glBindVertexArray(self.vao)
         if self.ebo is not None:
             glDrawElements(self.draw_type, len(self.indices), GL_UNSIGNED_INT, None)

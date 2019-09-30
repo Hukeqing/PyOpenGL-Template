@@ -21,6 +21,7 @@ class Window:
                  fps_clock: int = 0,
                  depth_mode: bool = True,
                  alpha_mode: bool = True,
+                 stencil_mode: bool = False,
                  basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = None):
         """
         The window for the Engine
@@ -31,6 +32,7 @@ class Window:
         :param fps_clock:       set the max fps in this window, 0 for INF(int)
         :param depth_mode:      is open the depth test. False for 4 dimension, True for 3 dimension(bool)
         :param alpha_mode:      allow the object has alpha(bool)
+        :param stencil_mode:    enable or disable the stencil(bool)
         :param basic_move:      enable the basic move by key(tuple, list)
         """
         # window properties
@@ -39,6 +41,7 @@ class Window:
         self.name: str = window_name
         self.depth_mode: bool = depth_mode
         self.alpha_mode: bool = alpha_mode
+        self.stencil_mode: bool = stencil_mode
         self.background_color: Color = Color(0, 0, 0) if background_color is None else background_color
         # fps
         self.fps_clock: int = fps_clock
@@ -80,8 +83,6 @@ class Window:
         glfw.make_context_current(self.window)
         Window.main_window = self.window
         self.last_time = glfw.get_time()
-        if self.depth_mode:
-            glEnable(GL_DEPTH_TEST)
 
     def bind_io_process(self):
         glfw.set_cursor_pos_callback(self.window, self.mouse_callback)
@@ -177,9 +178,14 @@ class Window:
         # glClearDepth(1.0)
         # glPointSize(5)
 
+        if self.depth_mode:
+            glEnable(GL_DEPTH_TEST)
         if self.alpha_mode:
             glEnable(GL_BLEND)  # 使透明生效
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)  # 使透明生效
+        if self.stencil_mode:
+            glEnable(GL_STENCIL_TEST)
+
         self.last_time = glfw.get_time()
         self.mouse_scroll_value = 0
         for function_name in self.start:

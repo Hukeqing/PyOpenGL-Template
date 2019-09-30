@@ -4,6 +4,20 @@ from OpenGLEngine.Component import *
 from OpenGLEngine.DefaultModel import *
 
 __all__ = [
-    'Color', 'DefaultColor', 'KeyCode', 'Vector3', 'Material',
-    'Camera', 'OrthogonalCamera', 'ComponentManager', 'GameObject', 'MeshFilter', 'DepthMode', 'MeshRenderer', 'Transform', 'Window',
+    'Color', 'DefaultColor',
+    'Compare', 'StencilOperator', 'KeyCode',
+    'Material', 'DefaultMaterial',
+    'Vector3', 'Matrix4', 'Matrix4x4',
+
+    'Camera', 'OrthogonalCamera',
+    'ComponentManager',
+    'DirectionLight',
+    'GameObject',
+    'MeshFilter',
+    'MeshRenderer',
+    'PointLight',
+    'SpotLight',
+    'Transform',
+    'Window',
+
     'Create', 'GLSL']
