@@ -1,5 +1,6 @@
 from ctypes import c_float, c_void_p, sizeof
-from typing import Optional, Union, Callable, List, Tuple
+from typing import Optional, Union
+
 import numpy as np
 from OpenGL.GL import *
 
