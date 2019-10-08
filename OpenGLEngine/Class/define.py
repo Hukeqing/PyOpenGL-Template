@@ -147,3 +147,9 @@ class KeyCode:
     KEY_RIGHT_SUPER = 347
     KEY_MENU = 348
     KEY_LAST = KEY_MENU
+
+
+class CullFace:
+    back = GL_BACK
+    front = GL_FRONT
+    all = GL_FRONT_AND_BACK

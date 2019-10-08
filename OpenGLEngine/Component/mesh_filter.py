@@ -4,7 +4,7 @@ from typing import Optional, Union
 import numpy as np
 from OpenGL.GL import *
 
-from OpenGLEngine.Class.define import Compare, StencilOperator
+from OpenGLEngine.Class.define import Compare, StencilOperator, CullFace
 from OpenGLEngine.Component.component_manager import ComponentManager
 
 
@@ -46,7 +46,8 @@ class MeshFilter(ComponentManager):
                  depth_mode: Compare = Compare.less_than,
                  write_stencil_mask: Union[int, bool] = False,
                  stencil_test: Optional[Union[Compare, int, Union[int, bool]]] = None,
-                 stencil_operator: Optional[Union[StencilOperator, StencilOperator, StencilOperator]] = None):
+                 stencil_operator: Optional[Union[StencilOperator, StencilOperator, StencilOperator]] = None,
+                 face_cull: Optional[CullFace] = None):
         super(MeshFilter, self).__init__(game_object)
         self.vertices = np.array(vertices, dtype=np.float32)
         self.vertex_format = MeshFilter.vertices_pattern(vertex_format)
@@ -61,6 +62,7 @@ class MeshFilter(ComponentManager):
         self.stencil_operator = stencil_operator if stencil_operator is not None else (StencilOperator.not_change,
                                                                                        StencilOperator.not_change,
                                                                                        StencilOperator.not_change)
+        self.face_cull = face_cull
 
         self.vao = None
         self.ebo = None
@@ -86,6 +88,10 @@ class MeshFilter(ComponentManager):
         glDepthFunc(self.depth_mode)
         glStencilMask(self.write_stencil_mask)
         glStencilFunc(*self.stencil_test)
+
+        if self.face_cull is not None:
+            glEnable(GL_CULL_FACE)
+            glCullFace(self.face_cull)
 
         glBindVertexArray(self.vao)
         if self.ebo is not None:

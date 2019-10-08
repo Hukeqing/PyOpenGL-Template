@@ -1,14 +1,13 @@
 from functools import reduce
-from typing import Optional, Union, List, Tuple
+from typing import Optional
 
 import numpy as np
 import pywavefront
 from OpenGL.GL import *
 
 import OpenGLEngine.DefaultModel.GLSL as GLSL
-from OpenGLEngine.Function import *
-from OpenGLEngine.Component import *
 from OpenGLEngine.Class import *
+from OpenGLEngine.Component import *
 
 
 class Create:
