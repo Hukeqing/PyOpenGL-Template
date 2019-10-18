@@ -89,7 +89,9 @@ class MeshFilter(ComponentManager):
         glStencilMask(self.write_stencil_mask)
         glStencilFunc(*self.stencil_test)
 
-        if self.face_cull is not None:
+        if self.face_cull is None:
+            glDisable(GL_CULL_FACE)
+        else:
             glEnable(GL_CULL_FACE)
             glCullFace(self.face_cull)
 
