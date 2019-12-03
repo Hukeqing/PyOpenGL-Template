@@ -122,10 +122,10 @@ glDeleteShader(fragmentShader)
 # 译注: 这个参数的意思简单说就是从这个属性第二次出现的地方到整个数组0位置之间有多少字节）。
 #
 # 最后一个参数的类型是void*，所以需要我们进行这个奇怪的强制类型转换。它表示位置数据在缓冲中起始位置的偏移量(Offset)。由于位置数据在数组的开头，所以这里是0。我们会在后面详细解释这个参数。
-glVertexAttribPointer(0, 3, GL_FLOAT, False, 6 * sizeof(c_float), c_void_p(0 * sizeof(c_float)))
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(c_float), c_void_p(0 * sizeof(c_float)))
 # 使用glEnableVertexAttribArray，以顶点属性位置值作为参数，启用顶点属性；顶点属性默认是禁用的。
 glEnableVertexAttribArray(0)
-glVertexAttribPointer(1, 3, GL_FLOAT, False, 6 * sizeof(c_float), c_void_p(3 * sizeof(c_float)))
+glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(c_float), c_void_p(3 * sizeof(c_float)))
 glEnableVertexAttribArray(1)
 
 

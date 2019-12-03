@@ -93,7 +93,7 @@ class MeshFilter(ComponentManager):
             glDisable(GL_CULL_FACE)
         else:
             glEnable(GL_CULL_FACE)
-            glCullFace(self.face_cull)
+            # glCullFace(self.face_cull)
 
         glBindVertexArray(self.vao)
         if self.ebo is not None:

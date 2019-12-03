@@ -155,6 +155,10 @@ class Window:
                 self.camera.transform.rotate(-self.camera.transform.up * self.basic_move[1] * self.delta_time)
             if self.input_get_key(glfw.KEY_D):
                 self.camera.transform.rotate(self.camera.transform.up * self.basic_move[1] * self.delta_time)
+            if self.input_get_key(glfw.KEY_Q):
+                self.camera.transform.translate(self.camera.transform.up * self.basic_move[0] * self.delta_time)
+            if self.input_get_key(glfw.KEY_E):
+                self.camera.transform.translate(-self.camera.transform.up * self.basic_move[0] * self.delta_time)
 
     def window_render(self, view: Matrix4x4, projection: Matrix4x4):
         for item in self.game_object_list:
