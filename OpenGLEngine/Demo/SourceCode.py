@@ -81,7 +81,8 @@ in vec3 ourColor;
 void main()
 {
     FragColor = vec4(ourColor, 1.0);
-}'''
+}
+'''
 glShaderSource(fragmentShader, fragmentShaderSource)
 glCompileShader(fragmentShader)
 # 检测在调用glCompileShader后编译是否成功
