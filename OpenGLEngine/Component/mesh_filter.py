@@ -57,7 +57,8 @@ class MeshFilter(ComponentManager):
             self.indices = None
         self.draw_type = draw_type
         self.depth_mode = depth_mode
-        self.write_stencil_mask = write_stencil_mask if isinstance(write_stencil_mask, int) else 0xFF if write_stencil_mask else 0x00
+        self.write_stencil_mask = write_stencil_mask if isinstance(write_stencil_mask,
+                                                                   int) else 0xFF if write_stencil_mask else 0x00
         self.stencil_test = stencil_test if stencil_test is not None else (Compare.less_than, 0, 0x00)
         self.stencil_operator = stencil_operator if stencil_operator is not None else (StencilOperator.not_change,
                                                                                        StencilOperator.not_change,
@@ -80,20 +81,24 @@ class MeshFilter(ComponentManager):
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, self.indices, GL_STATIC_DRAW)
         # 链接顶点属性
         for index, cur_type in enumerate(self.vertex_format.types):
-            glVertexAttribPointer(index, self.vertex_format.numbers[index], GL_FLOAT, False, self.vertex_format.count * sizeof(c_float),
-                                  c_void_p((0 if index == 0 else self.vertex_format.offset[index - 1]) * sizeof(c_float)))
+            glVertexAttribPointer(index, self.vertex_format.numbers[index], GL_FLOAT, False,
+                                  self.vertex_format.count * sizeof(c_float),
+                                  c_void_p(
+                                      (0 if index == 0 else self.vertex_format.offset[index - 1]) * sizeof(c_float)))
             glEnableVertexAttribArray(index)
 
     def draw(self):
         glDepthFunc(self.depth_mode)
-        glStencilMask(self.write_stencil_mask)
+
+        glStencilOp(*self.stencil_operator)
         glStencilFunc(*self.stencil_test)
+        glStencilMask(self.write_stencil_mask)
 
         if self.face_cull is None:
             glDisable(GL_CULL_FACE)
         else:
             glEnable(GL_CULL_FACE)
-            # glCullFace(self.face_cull)
+            glCullFace(self.face_cull)
 
         glBindVertexArray(self.vao)
         if self.ebo is not None:

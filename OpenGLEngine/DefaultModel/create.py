@@ -13,11 +13,11 @@ from OpenGLEngine.Component import *
 class Create:
     cube_vertices_VT = [
         -0.5, -0.5, -0.5, 0.0, 0.0,
+        0.5, 0.5, -0.5, 1.0, 1.0,
         0.5, -0.5, -0.5, 1.0, 0.0,
         0.5, 0.5, -0.5, 1.0, 1.0,
-        0.5, 0.5, -0.5, 1.0, 1.0,
-        -0.5, 0.5, -0.5, 0.0, 1.0,
         -0.5, -0.5, -0.5, 0.0, 0.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0,
 
         -0.5, -0.5, 0.5, 0.0, 0.0,
         0.5, -0.5, 0.5, 1.0, 0.0,
@@ -34,11 +34,11 @@ class Create:
         -0.5, 0.5, 0.5, 1.0, 0.0,
 
         0.5, 0.5, 0.5, 1.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, 1.0,
         0.5, 0.5, -0.5, 1.0, 1.0,
         0.5, -0.5, -0.5, 0.0, 1.0,
-        0.5, -0.5, -0.5, 0.0, 1.0,
-        0.5, -0.5, 0.5, 0.0, 0.0,
         0.5, 0.5, 0.5, 1.0, 0.0,
+        0.5, -0.5, 0.5, 0.0, 0.0,
 
         -0.5, -0.5, -0.5, 0.0, 1.0,
         0.5, -0.5, -0.5, 1.0, 1.0,
@@ -48,18 +48,18 @@ class Create:
         -0.5, -0.5, -0.5, 0.0, 1.0,
 
         -0.5, 0.5, -0.5, 0.0, 1.0,
+        0.5, 0.5, 0.5, 1.0, 0.0,
         0.5, 0.5, -0.5, 1.0, 1.0,
         0.5, 0.5, 0.5, 1.0, 0.0,
-        0.5, 0.5, 0.5, 1.0, 0.0,
-        -0.5, 0.5, 0.5, 0.0, 0.0,
-        -0.5, 0.5, -0.5, 0.0, 1.0]
+        -0.5, 0.5, -0.5, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 0.0, 0.0]
     cube_vertices_VN = [
         -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
         0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
         0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
-        0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
-        -0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
         -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+        -0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
 
         -0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
         0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
@@ -76,11 +76,11 @@ class Create:
         -0.5, 0.5, 0.5, -1.0, 0.0, 0.0,
 
         0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
         0.5, 0.5, -0.5, 1.0, 0.0, 0.0,
         0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
-        0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
-        0.5, -0.5, 0.5, 1.0, 0.0, 0.0,
         0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
+        0.5, -0.5, 0.5, 1.0, 0.0, 0.0,
 
         -0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
         0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
@@ -90,48 +90,53 @@ class Create:
         -0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
 
         -0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
         0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
         0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
-        0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
-        -0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
-        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0]
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 0.0, 1.0, 0.0]
     cube_vertices_VTN = [
         -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
         0.5, -0.5, -0.5, 1.0, 0.0, 0.0, 0.0, -1.0,
         0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
-        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 0.0, -1.0,
-        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, -1.0,
         -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0,
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, -1.0,
+
         -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
         0.5, -0.5, 0.5, 1.0, 0.0, 0.0, 0.0, 1.0,
         0.5, 0.5, 0.5, 1.0, 1.0, 0.0, 0.0, 1.0,
         0.5, 0.5, 0.5, 1.0, 1.0, 0.0, 0.0, 1.0,
         -0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0,
         -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
+
         -0.5, 0.5, 0.5, 1.0, 0.0, -1.0, 0.0, 0.0,
         -0.5, 0.5, -0.5, 1.0, 1.0, -1.0, 0.0, 0.0,
         -0.5, -0.5, -0.5, 0.0, 1.0, -1.0, 0.0, 0.0,
         -0.5, -0.5, -0.5, 0.0, 1.0, -1.0, 0.0, 0.0,
         -0.5, -0.5, 0.5, 0.0, 0.0, -1.0, 0.0, 0.0,
         -0.5, 0.5, 0.5, 1.0, 0.0, -1.0, 0.0, 0.0,
+
         0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
         0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
         0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
-        0.5, -0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0,
-        0.5, -0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0,
         0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0,
+
         -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, -1.0, 0.0,
         0.5, -0.5, -0.5, 1.0, 1.0, 0.0, -1.0, 0.0,
         0.5, -0.5, 0.5, 1.0, 0.0, 0.0, -1.0, 0.0,
         0.5, -0.5, 0.5, 1.0, 0.0, 0.0, -1.0, 0.0,
         -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -1.0, 0.0,
         -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, -1.0, 0.0,
+
         -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
         0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 1.0, 0.0,
         0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
-        0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0,
-        -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0,
-        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0]
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0,
+        -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0]
     quad_vertices_VT = [0.5, 0.5, 0, 1.0, 1.0,
                         0.5, -0.5, 0, 1.0, 0.0,
                         -0.5, -0.5, 0, 0.0, 0.0,
@@ -153,7 +158,8 @@ class Create:
                near: float = 0.3,
                far: float = 1000) -> GameObject:
         new_camera = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
-        new_camera.add_component(Camera, window=(window.width, window.height) if isinstance(window, Window) else window, zoom=zoom, near=near,
+        new_camera.add_component(Camera, window=(window.width, window.height) if isinstance(window, Window) else window,
+                                 zoom=zoom, near=near,
                                  far=far)
         return new_camera
 
@@ -169,7 +175,8 @@ class Create:
                           near: float = 0.3,
                           far: float = 1000) -> GameObject:
         new_orthogonal_camera = GameObject(name=object_name, position=position, rotation=rotation, scale=scale)
-        new_orthogonal_camera.add_component(OrthogonalCamera, left=left, right=right, bottom=bottom, up=up, near=near, far=far)
+        new_orthogonal_camera.add_component(OrthogonalCamera, left=left, right=right, bottom=bottom, up=up, near=near,
+                                            far=far)
         return new_orthogonal_camera
 
     @staticmethod
@@ -182,7 +189,8 @@ class Create:
         vs = GLSL.GLSL_maker.get_vs(vertex_format='VTN', three_dimensional=True)
         fs = GLSL.GLSL_maker.get_fs(True)
         new_cube.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
-        new_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VTN, vertex_format='V3T2N3', draw_type=GL_TRIANGLES)
+        new_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VTN, vertex_format='V3T2N3',
+                               draw_type=GL_TRIANGLES)
         return new_cube
 
     @staticmethod
@@ -195,7 +203,8 @@ class Create:
         vs = GLSL.GLSL_maker.get_vs(vertex_format='VTN', three_dimensional=True)
         fs = GLSL.GLSL_maker.get_fs(True)
         new_quad.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
-        new_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VTN, vertex_format='V3T2N3', indices=Create.quad_indices,
+        new_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VTN, vertex_format='V3T2N3',
+                               indices=Create.quad_indices,
                                draw_type=GL_TRIANGLES)
 
     @staticmethod
@@ -208,7 +217,8 @@ class Create:
         vs = GLSL.GLSL_maker.get_vs(vertex_format='VT', three_dimensional=True)
         fs = GLSL.GLSL_maker.get_fs(False)
         new_ignore_light_quad.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
-        new_ignore_light_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VT, vertex_format='V3T2', indices=Create.quad_indices,
+        new_ignore_light_quad.add_component(MeshFilter, vertices=Create.quad_vertices_VT, vertex_format='V3T2',
+                                            indices=Create.quad_indices,
                                             draw_type=GL_TRIANGLES)
 
     @staticmethod
@@ -221,18 +231,20 @@ class Create:
         vs = GLSL.GLSL_maker.get_vs('VT', True)
         fs = GLSL.GLSL_maker.get_fs(False)
         new_ignore_light_cube.add_component(MeshRenderer, vertex_shader=vs, fragment_shader=fs, material=material)
-        new_ignore_light_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VT, vertex_format='V3T2', draw_type=GL_TRIANGLES)
+        new_ignore_light_cube.add_component(MeshFilter, vertices=Create.cube_vertices_VT, vertex_format='V3T2',
+                                            draw_type=GL_TRIANGLES)
         return new_ignore_light_cube
 
     @staticmethod
     def direction_light(object_name: str = 'new Direction Light',
                         rotation: Optional[Vector3] = None,
-                        ambient: Optional[Vector3] = None,
-                        diffuse: Optional[Vector3] = None,
-                        specular: Optional[Vector3] = None,
+                        ambient: Optional[float] = None,
+                        diffuse: Optional[float] = None,
+                        specular: Optional[float] = None,
                         color: Optional[Color] = None):
         new_direction_light = GameObject(name=object_name, position=None, rotation=rotation, scale=None)
-        new_direction_light.add_component(DirectionLight, ambient=ambient, diffuse=diffuse, specular=specular, color=color)
+        new_direction_light.add_component(DirectionLight, ambient=ambient, diffuse=diffuse, specular=specular,
+                                          color=color)
         return new_direction_light
 
     @staticmethod
@@ -244,7 +256,8 @@ class Create:
                     specular: Optional[float] = None,
                     color: Optional[Color] = None):
         new_point_light = GameObject(name=object_name, position=position, rotation=None, scale=None)
-        new_point_light.add_component(PointLight, light_range=light_range, ambient=ambient, diffuse=diffuse, specular=specular, color=color)
+        new_point_light.add_component(PointLight, light_range=light_range, ambient=ambient, diffuse=diffuse,
+                                      specular=specular, color=color)
         return new_point_light
 
     @staticmethod
@@ -258,7 +271,8 @@ class Create:
                    specular: Optional[float] = None,
                    color: Optional[Color] = None):
         new_spot_light = GameObject(name=object_name, position=position, rotation=None, scale=None)
-        new_spot_light.add_component(SpotLight, cut_off=cut_off, outer_cut_off=outer_cut_off, light_range=light_range, ambient=ambient,
+        new_spot_light.add_component(SpotLight, cut_off=cut_off, outer_cut_off=outer_cut_off, light_range=light_range,
+                                     ambient=ambient,
                                      diffuse=diffuse, specular=specular, color=color)
         return new_spot_light
 

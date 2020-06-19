@@ -113,7 +113,7 @@ void main() {
     // phase 3: spot light
     for (int i = 0; i < spotLight_number; i++)
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir) * spotLights[i].color;
-
+    /*
     if (material.color.w < 1)
     {
         vec3 back_result = vec3(0);
@@ -128,6 +128,7 @@ void main() {
             back_result += CalcSpotLight(spotLights[i], -norm, FragPos, viewDir) * spotLights[i].color;
         result = (result + back_result * (1 - material.color.w)) / 2;
     }
+    */
     // texture mix
     vec4 texture_result = vec4(1.0);
     if (material.texture_number > 0) {
