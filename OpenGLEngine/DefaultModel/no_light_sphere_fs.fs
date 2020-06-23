@@ -1,6 +1,5 @@
 #version 330 core
 
-in vec2 TexCoord;
 in vec3 FragPos;
 in vec3 Pos;
 
@@ -19,7 +18,7 @@ struct Material {
     bool useSampler;
 
     int texture_number;
-    Texture textures[14];
+    Texture textures[___set_texture_number];
 };
 
 struct TestureMaterial {
@@ -31,6 +30,8 @@ uniform Material material;
 TestureMaterial texture_material;
 
 void main() {
+    float PI = acos(-1);
+    vec2 TexCoord = vec2(-(atan(Pos.z, Pos.x) + PI) / 2 / PI, -acos(Pos.y) / PI);
     vec3 result = vec3(1, 1, 1);
     // texture mix
     vec4 texture_result = vec4(1.0);

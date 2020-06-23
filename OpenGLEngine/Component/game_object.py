@@ -13,10 +13,12 @@ class GameObject:
                  name='new GameObject',
                  position=None,
                  rotation=None,
-                 scale=None):
+                 scale=None,
+                 draw_rotate=None):
         self.name = name
         self.transform = Transform(self, position=position, rotation=rotation, scale=scale)
         self.component_list = [self.transform]
+        self.draw_rotate = draw_rotate if draw_rotate is not None else 'xyz'
         self.renderer = lambda model, view, projection: (model, view, projection)
 
     def get_component(self, component_name):
@@ -36,9 +38,13 @@ class GameObject:
         if this_mesh_renderer is not None:
             this_mesh_renderer.use()
             m = glm.translate(glm.mat4(1), self.transform.position)
-            m = glm.rotate(m, glm.radians(self.transform.rotation.x), glm.vec3(1, 0, 0))
-            m = glm.rotate(m, glm.radians(self.transform.rotation.y), glm.vec3(0, 1, 0))
-            m = glm.rotate(m, glm.radians(self.transform.rotation.z), glm.vec3(0, 0, 1))
+            for c in self.draw_rotate:
+                if c == 'x':
+                    m = glm.rotate(m, glm.radians(self.transform.rotation.x), glm.vec3(1, 0, 0))
+                elif c == 'y':
+                    m = glm.rotate(m, glm.radians(self.transform.rotation.y), glm.vec3(0, 1, 0))
+                elif c == 'z':
+                    m = glm.rotate(m, glm.radians(self.transform.rotation.z), glm.vec3(0, 0, 1))
             m = glm.scale(m, self.transform.scale)
             model, view, projection = self.renderer(model=m, view=view, projection=projection)
             this_mesh_renderer.set_matrix('model', glm.value_ptr(model))

@@ -120,7 +120,7 @@ class Material:
             else:
                 glUniform1i(glGetUniformLocation(shader_program, 'material.specular'), 1)
                 glActiveTexture(GL_TEXTURE0 + 1)
-                glBindTexture(GL_TEXTURE_2D, self.diffuse.specular)
+                glBindTexture(GL_TEXTURE_2D, self.diffuse.texture)
 
         else:
             glUniform1i(glGetUniformLocation(shader_program, 'material.useSampler'), False)

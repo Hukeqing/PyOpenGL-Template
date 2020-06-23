@@ -1,6 +1,5 @@
 #version 330 core
 
-in vec2 TexCoord;
 in vec3 FragPos;
 in vec3 Normal;
 in vec3 Pos;
@@ -88,6 +87,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main() {
+    float PI = acos(-1);
+    vec2 TexCoord = vec2(-(atan(Pos.z, Pos.x) + PI) / 2 / PI, -acos(Pos.y) / PI);
     // properties
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
