@@ -21,7 +21,8 @@ class Window:
                  depth_mode: bool = True,
                  alpha_mode: bool = True,
                  stencil_mode: bool = False,
-                 basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = None):
+                 basic_move: Optional[Union[
+                     Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = None):
         """
         The window for the Engine
         :param width:           the width of window(int)
@@ -53,19 +54,20 @@ class Window:
         self.direction_light: List[GameObject] = list()
         self.point_light: List[GameObject] = list()
         self.spot_light: List[GameObject] = list()
-        self.light: Tuple[List[GameObject], List[GameObject], List[GameObject]] = (self.direction_light, self.point_light, self.spot_light)
+        self.light: Tuple[List[GameObject], List[GameObject], List[GameObject]] = (
+            self.direction_light, self.point_light, self.spot_light)
         # update function
         self.update: List[Callable[[], bool]] = list()
         self.start: List[Callable[[], bool]] = list()
         # game object list
         self.game_object_list: List[GameObject] = list()
         # mouse properties
-        self.mouse_position: Tuple[int, int] = (0, 0)
         self.mouse_scroll_value: int = 0
         # time
         self.last_time: int = 0
         self.delta_time: float = 0
-        self.basic_move: Optional[Union[Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = basic_move
+        self.basic_move: Optional[
+            Union[Tuple[Union[int, float], Union[int, float], Union[int, float]], List[Union[int, float]]]] = basic_move
         # init window
         self.create_window()
         self.bind_io_process()
@@ -84,7 +86,6 @@ class Window:
         self.last_time = glfw.get_time()
 
     def bind_io_process(self):
-        glfw.set_cursor_pos_callback(self.window, self.mouse_callback)
         glfw.set_scroll_callback(self.window, self.scroll_callback)
 
     def set_window_camera(self, camera: GameObject):
@@ -171,8 +172,14 @@ class Window:
     def input_get_key(self, key_code):
         return glfw.get_key(self.window, key_code) == glfw.PRESS
 
-    def mouse_callback(self, window, xpos, ypos):
-        self.mouse_position = (xpos, ypos)
+    def input_get_key_mods(self, key_code):
+        return glfw.get_input_mode(self.window, key_code) == glfw.PRESS
+
+    def input_get_mouse_button(self, key_code):
+        return glfw.get_mouse_button(self.window, key_code) == glfw.PRESS
+
+    def input_get_mouse_position(self):
+        return glfw.get_cursor_pos(self.window)
 
     def scroll_callback(self, window, xoffset, yoffset):
         if self.basic_move is not None:

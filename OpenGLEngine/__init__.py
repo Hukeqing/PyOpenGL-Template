@@ -5,7 +5,7 @@ from OpenGLEngine.DefaultModel import *
 
 __all__ = [
     'Color', 'DefaultColor',
-    'Compare', 'StencilOperator', 'KeyCode', 'CullFace',
+    'Compare', 'StencilOperator', 'KeyCode', 'MouseCode', 'CullFace',
     'Material', 'DefaultMaterial',
     'Vector3', 'Matrix4', 'Matrix4x4',
 
